@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "角色列表";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-info" id="btnOK">确定</button>
+                <button type="button" class="btn btn-default" id="btnClose">关闭</button>
+            </div>
+            <div class="col-sm-12">
+                <label>操作</label>
+                <ul class="ztree" id="ztree1"></ul>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Id = $.request("F_Id"), ztree1;
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/SystemManage/Role/GetAuthorize?F_Id=" + F_Id,
+                    async: false,
+                    success: function (result) {
+                        var setting = {
+                            check: {
+                                enable: true
+                            }
+                        };
+                        ztree1 = $.fn.zTree.init($("#ztree1"), setting, result);
+                    }
+                });
+            }
+            $("#btnOK").on("click", function (e) {
+                var actions = [];
+                $.each(ztree1.getCheckedNodes(true), function (index, element) {
+                    if (!!element.action) {
+                        actions.push(element.id);
+                    }
+                });
+                $.submitAjax({
+                    url: "/SystemManage/Role/SubmitAuthorize?F_Id=" + F_Id,
+                    data: { Actions: JSON.stringify(actions) },
+                    success: function (data) {
+                        $.currentWindow().find(':button[name="refresh"]').trigger("click");
+                        $.modalClose();
+                    }
+                });
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

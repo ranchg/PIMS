@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "产品管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section CssLink{
+    <link href="~/Static/bootstrap-table/extensions/tree-column/bootstrap-table-tree-column.css" rel="stylesheet" />
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <table authorize="Grid" id="table1"></table>
+            <hr class="hr2" />
+            <div class="text-right">
+                <button type="button" class="btn btn-info" id="btnSubmit">确定</button>
+                <button type="button" class="btn btn-default" id="btnClose">关闭</button>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                formatSearch: function () {
+                    return '编码/名称';
+                },
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Name", title: "名称", sortable: true },
+                    { field: "F_Code", title: "编码", sortable: true },
+                    { field: "F_Spec", title: "规格", sortable: true },
+                    { field: "F_Unit", title: "单位", sortable: true },
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnSubmit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.parentLayerWindow().find("#F_Product_Name").val(row.F_Name);
+                    $.parentLayerWindow().find("#F_Product_Id").val(row.F_Id);
+                    $.modalClose();
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

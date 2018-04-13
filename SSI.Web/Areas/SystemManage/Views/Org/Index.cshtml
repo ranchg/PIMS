@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "组织列表";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section CssLink{
+    <link href="~/Static/bootstrap-table/extensions/tree-column/bootstrap-table-tree-column.css" rel="stylesheet" />
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEnable">启用</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDisable">禁用</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptLink{
+    <script src="~/Static/bootstrap-table/extensions/tree-column/bootstrap-table-tree-column.min.js"></script>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTable({
+                toolbar: "#table1_toolbar",
+                url: "/SystemManage/Org/GetGridList",
+                idField: "F_Id",
+                parentIdField: "F_Parent_Id",
+                treeShowField: "F_Name",
+                clickToSelect: true,
+                singleSelect: true,
+                showRefresh: true,
+                showColumns: true,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Name", title: "名称", sortable: true },
+                    { field: "F_Manager", title: "负责人", sortable: true },
+                    { field: "F_Phone", title: "电话", sortable: true },
+                    { field: "F_Icon", title: "图标", sortable: true },
+                    {
+                        field: "F_Type_Mark", title: "类型标志",
+                        formatter: function (value, row) {
+                            switch (value) {
+                                case 1:
+                                    return '公司';
+                                case 2:
+                                    return '部门';
+                                default:
+                                    return '类型错误';
+                            }
+                        }
+                    },
+                    {
+                        field: "F_Enable_Mark", title: "有效标志",
+                        formatter: function (value, row) {
+                            switch (value) {
+                                case 0:
+                                    return '<i class="fa fa-times text-danger"></i>';
+                                case 1:
+                                    return '<i class="fa fa-check text-success"></i>';
+                                default:
+                                    return '类型错误';
+                            }
+                        }
+                    },
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ],
+                onCheck: function (row) {
+                    if (row.F_Id == 1) {
+                        $("#btnDetail").hide();
+                        $("#btnEdit").hide();
+                        $("#btnDelete").hide();
+                        $("#btnEnable").hide();
+                        $("#btnDisable").hide();
+                    } else {
+                        $("#btnDetail").show();
+                        $("#btnEdit").show();
+                        $("#btnDelete").show();
+                        $("#btnEnable").show();
+                        $("#btnDisable").show();
+                    }
+                }
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/SystemManage/Org/Form?Detial=true&F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "添加",
+                        content: "/SystemManage/Org/Form?F_Parent_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/SystemManage/Org/Form?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/Org/DeleteForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnEnable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/Org/EnableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDisable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/Org/DisableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAuthorize").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "操作授权",
+                        area: ['400px', '90%'],
+                        content: "/SystemManage/Org/Authorize?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+        });
+    </script>
+}

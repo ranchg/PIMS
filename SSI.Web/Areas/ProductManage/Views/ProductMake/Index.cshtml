@@ -1,0 +1,212 @@
+﻿@{
+    ViewBag.Title = "产品生产管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section CssLink{
+    <link href="~/Static/bootstrap-table/extensions/tree-column/bootstrap-table-tree-column.css" rel="stylesheet" />
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date" name="F_Make_Date" id="F_Make_Date_Start" placeholder="生产日期开始" operate="AfterDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date" name="F_Make_Date" id="F_Make_Date_End" placeholder="生产日期结束" operate="BeforeDay" readonly />
+                        </div>
+                        @*<div class="form-group">
+                            <select class="form-control" name="F_Is_Read" id="F_Enable_Mark" required operate="Equal">
+                                <option value="">是否统计</option>
+                                <option value="1">已统计</option>
+                                <option value="0">未统计</option>
+                            </select>
+                        </div>*@
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
+                        @*<button type="button" class="btn btn-default" authorize="Button" id="btnCountPart">统计</button>*@
+                        @*<button type="button" class="btn btn-default" authorize="Button" id="btnEnable">启用</button>
+                            <button type="button" class="btn btn-default" authorize="Button" id="btnDisable">禁用</button>*@
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            Date().toString()
+            $("#table1").bootstrapTableInit({
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Product_Name", title: "产品名称", sortable: true },
+                    { field: "F_Quantity", title: "数量", sortable: true },
+                    {
+                        field: "F_Make_Date", title: "生产日期", sortable: true,
+                        formatter: function (value, row) {
+                            return new Date(value).toLocaleDateString().replace(/\//g, '-');
+                        }
+                    },
+                    //{
+                    //    field: "F_Is_Read", title: "是否统计", formatter: function (value, row) {
+                    //        switch (value) {
+                    //            case 0:
+                    //                return '<font color=red>未统计</font>';
+                    //            case 1:
+                    //                return '<font color=green>已统计</font>';
+                    //            default:
+                    //                return '类型错误';
+                    //        }
+                    //    }
+                    //},
+                    //{
+                    //    field: "F_Enable_Mark", title: "有效标志",
+                    //    formatter: function (value, row) {
+                    //        switch (value) {
+                    //            case 0:
+                    //                return '<i class="fa fa-times text-danger"></i>';
+                    //            case 1:
+                    //                return '<i class="fa fa-check text-success"></i>';
+                    //            default:
+                    //                return '类型错误';
+                    //        }
+                    //    }
+                    //},
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ]
+            });
+            //查看
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/ProductManage/ProductMake/Form?Detial=true&F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //添加
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    content: "/ProductManage/ProductMake/Form",
+                });
+            });
+            //修改
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/ProductManage/ProductMake/Form?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //删除
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/ProductManage/ProductMake/DeleteForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //启用
+            $("#btnEnable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/ProductManage/ProductMake/EnableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //禁用
+            $("#btnDisable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/ProductManage/ProductMake/DisableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //导出
+            $("#btnExportExcel").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                //var query = $("#table1_query").serializeQuery();
+                $.download("/ProductManage/ProductMake/ExportExcel?field=" + field + "&query=");
+            });
+            //查询
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            //重置
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            //统计
+            $("#btnCountPart").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        prompt: '统计之后，产品生数据将无法更改，请仔细检查后确认！',
+                        url: "/ProductManage/ProductMake/CountPart?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //$('#table1').on('click-row.bs.table', function (e, row, element) {
+            //    if (row.F_Is_Read == 0) {
+            //        $('#btnEdit').show();
+            //        $('#btnDelete').show();
+            //        $('#btnCountPart').show();
+            //    } else {
+            //        $('#btnEdit').hide();
+            //        $('#btnDelete').hide();
+            //        $('#btnCountPart').hide();
+            //    }
+            //});
+        });
+    </script>
+}

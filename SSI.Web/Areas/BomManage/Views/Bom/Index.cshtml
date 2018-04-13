@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "BOM列表";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <label for="F_DATE">开始：</label>
+                            <input type="text" class="form-control form_date_time" name="F_DATE" id="F_DATE_Start" placeholder="开始" operate="AfterDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Create_Time">结束：</label>
+                            <input type="text" class="form-control form_date_time" name="F_DATE" id="F_DATE_Time_End" placeholder="结束" operate="BeforeDay" readonly />
+                        </div>
+                        <hr class="hr1" />
+                        <div class="form-group">
+                            <label for="F_PRODUCT_NAME">产品名称：</label>
+                            <input type="text" class="form-control" name="F_PRODUCT_NAME" id="F_PRODUCT_NAME" placeholder="产品名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_NAME">BOM名称：</label>
+                            <input type="text" class="form-control" name="F_NAME" id="F_NAME" placeholder="BOM名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_VERSION">BOM版本：</label>
+                            <input type="text" class="form-control" name="F_VERSION" id="F_VERSION" placeholder="BOM版本" operate="Like" />
+                        </div>                        
+                        <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                        <button type="button" class="btn btn-default" onclick="Reset();">重置</button>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetailList">BOM详情列表</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="DownloadData">下载BOM明细模版</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="ImportData">导入BOM明细模版</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/BomManage/Bom/GetGridList",
+                idField: "F_Id",
+                toolbar: "#table1_toolbar",
+                search: false,
+                showColumns: true,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_PRODUCT_NAME", title: "产品名称", sortable: true },
+                    { field: "F_NAME", title: "BOM名称", sortable: true },
+                    { field: "F_CODE", title: "BOM编码", sortable: true },
+                    { field: "F_VERSION", title: "BOM版本", sortable: true },
+                    { field: "F_DATE", title: "BOM生效日期", sortable: true },
+                    { field: "F_CREATE_TIME", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/BomManage/Bom/Form?Detial=true&F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    content: "/BomManage/Bom/Form"
+                });
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/BomManage/Bom/Form?F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var flag = false;
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.getJson({
+                        url: "/BomManage/Bom/GetBomDetails?F_Id=" + row.F_ID,
+                        success: function (result) {
+                            debugger;
+                            if (result.Msg == "warning") {
+                                $.confirmAjax({
+                                    url: "/BomManage/Bom/DeleteForm?F_Id=" + row.F_ID,
+                                    prompt: "该BOM下存在清单信息,是否继续删除",
+                                    success: function (result) {
+                                        $("#table1").bootstrapTable('refresh');
+                                    }
+                                });
+                            } else {
+                                $.confirmAjax({
+                                    url: "/BomManage/Bom/DeleteForm?F_Id=" + row.F_ID,
+                                    success: function (result) {
+                                        $("#table1").bootstrapTable('refresh');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+
+            //导出Excel
+            $("#btnExportExcel").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/BomManage/Bom/ExportExcel?field=" + field + "&query=" + query);
+            });
+            //下载模板
+            $("#DownloadData").on("click", function (e) {
+                $.download("/BomManage/Bom/DownloadData");
+            });
+            //导入模板
+            $("#ImportData").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.upload("/BomManage/Bom/UpdateData?F_Id=" + row.F_ID, function () {
+                        $("#table1").bootstrapTable('refresh');
+                    });
+                }else {
+                    $.modalAlert("请选中一行数据");
+                }
+                
+            });
+            //BOM详情列表
+            $("#btnDetailList").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "详情列表",
+                        area: ['80%', '90%'],
+                        content: "/BomManage/Bom/Detail?F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            })
+        });
+
+
+        function Reset() {
+            $(".form-group").find('input,select').each(function () {
+                $(this).val('');
+            });
+            $("#table1").bootstrapTable('refresh');
+        }
+    </script>
+}

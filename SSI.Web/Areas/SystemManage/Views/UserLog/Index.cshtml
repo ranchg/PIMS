@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "用户日志列表";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date_time" name="F_Create_Time" id="F_Create_Time_Start" placeholder="开始时间" operate="AfterDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date_time" name="F_Create_Time" id="F_Create_Time_End" placeholder="结束时间" operate="BeforeDay" readonly />
+                        </div>
+                        <hr class="hr1" />
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Account" id="F_Account" placeholder="帐号" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Menu" id="F_Menu" placeholder="菜单" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Action" id="F_Action" placeholder="操作" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnOneWeek">保留近一周</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnOneMonth">保留近一月</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnThreeMonth">保留近三月</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnRemoveAll">清除全部</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/SystemManage/UserLog/GetGridList",
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Account", title: "帐号", sortable: true },
+                    { field: "F_IPAddress", title: "IP地址", sortable: true },
+                    { field: "F_Menu", title: "菜单", sortable: true },
+                    { field: "F_Action", title: "操作", sortable: true },
+                    {
+                        field: "F_Result_Mark", title: "结果标志",
+                        formatter: function (value, row) {
+                            switch (value) {
+                                case 1:
+                                    return '成功';
+                                case 2:
+                                    return '失败';
+                                case 3:
+                                    return '异常';
+                                default:
+                                    return '类型错误';
+                            }
+                        }
+                    },
+                    {
+                        field: "F_Enable_Mark", title: "有效标志", sortable: true,
+                        formatter: function (value, row) {
+                            if (value == 1) {
+                                return '<i class="fa fa-check text-success"></i> ';
+                            } else {
+                                return '<i class="fa fa-times text-danger"></i> ';
+                            }
+                        }
+                    },
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/SystemManage/UserLog/Form?Detial=true&F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnOneWeek").on("click", function (e) {
+                $.confirmAjax({
+                    url: "/SystemManage/UserLog/OneWeek",
+                    success: function (result) {
+                        $("#table1").bootstrapTable('refresh');
+                    }
+                });
+            });
+            $("#btnOneMonth").on("click", function (e) {
+                $.confirmAjax({
+                    url: "/SystemManage/UserLog/OneMonth",
+                    success: function (result) {
+                        $("#table1").bootstrapTable('refresh');
+                    }
+                });
+            });
+            $("#btnThreeMonth").on("click", function (e) {
+                $.confirmAjax({
+                    url: "/SystemManage/UserLog/ThreeMonth",
+                    success: function (result) {
+                        $("#table1").bootstrapTable('refresh');
+                    }
+                });
+            });
+            $("#btnRemoveAll").on("click", function (e) {
+                $.confirmAjax({
+                    url: "/SystemManage/UserLog/RemoveAll",
+                    success: function (result) {
+                        $("#table1").bootstrapTable('refresh');
+                    }
+                });
+            });
+            $("#btnExportExcel").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/SystemManage/UserLog/Export?field=" + field + "&query=" + query);
+            });
+        });
+    </script>
+}

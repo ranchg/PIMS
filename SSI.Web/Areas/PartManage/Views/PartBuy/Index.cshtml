@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "零件采购管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date" name="F_Eta" id="F_Eta_Start" placeholder="预计到货日期开始" operate="AfterDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date" name="F_Eta" id="F_Eta_End" placeholder="预计到货日期结束" operate="BeforeDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date" name="F_Ata" id="F_Ata_Start" placeholder="实际到货日期开始" operate="AfterDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date" name="F_Ata" id="F_Ata_End" placeholder="实际到货日期结束" operate="BeforeDay" readonly />
+                        </div>
+                        <hr class="hr1" />
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Name" id="F_Part_Name" placeholder="零件名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Code" id="F_Part_Code" placeholder="零件编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Unit" id="F_Part_Unit" placeholder="零件规格" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExport">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/PartManage/PartBuy/GetGridList",
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_PART_NAME", title: "零件名称", sortable: true },
+                    { field: "F_PART_CODE", title: "零件编码", sortable: true },
+                    { field: "F_PART_SPEC", title: "零件规格", sortable: true },
+                    { field: "F_PART_UNIT", title: "零件单位", sortable: true },
+                    { field: "F_QUANTITY", title: "数量", sortable: true },
+                    {
+                        field: "F_ETA", title: "预计到货日期", sortable: true,
+                        formatter: function (value, row) {
+                            if (!!value) {
+                                var result = $.dataFormat(new Date(value), "yyyy-MM-dd");
+                                if (!row.F_ATA && new Date() > new Date(value)) {
+                                    result = '<strong class="text-danger">' + result + '</strong> ';
+                                }
+                                return result;
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
+                    {
+                        field: "F_ATA", title: "实际到货日期", sortable: true,
+                        formatter: function (value, row) {
+                            if (!!value) {
+                                return $.dataFormat(new Date(value), "yyyy-MM-dd");
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
+                    { field: "F_REMARK", title: "备注", sortable: true },
+                    { field: "F_CREATE_TIME", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/PartManage/PartBuy/Form?Detial=true&F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    content: "/PartManage/PartBuy/Form"
+                });
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/PartManage/PartBuy/Form?F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/PartManage/PartBuy/DeleteForm?F_Id=" + row.F_ID,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnExport").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/PartManage/PartBuy/Export?field=" + field + "&query=" + query);
+            });
+        });
+    </script>
+}

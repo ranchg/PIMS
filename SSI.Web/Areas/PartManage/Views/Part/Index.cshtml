@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "零件信息管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDownload">下载导入模版</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnImport">导入</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExport">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/PartManage/Part/GetGridList",
+                formatSearch: function () {
+                    return '名称/编码/规格';
+                },
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Name", title: "名称", sortable: true },
+                    { field: "F_Code", title: "编码", sortable: true },
+                    { field: "F_Spec", title: "规格", sortable: true },
+                    { field: "F_Unit", title: "单位", sortable: true },
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        area: ['60%', '60%'],
+                        content: "/PartManage/Part/Form?Detial=true&F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    area: ['60%', '60%'],
+                    content: "/PartManage/Part/Form"
+                });
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        area: ['60%', '60%'],
+                        content: "/PartManage/Part/Form?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/PartManage/Part/DeleteForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDownload").on("click", function (e) {
+                $.download("/PartManage/Part/Download");
+            });
+            $("#btnImport").on("click", function (e) {
+                $.upload("/PartManage/Part/Import", function () {
+                    $("#table1").bootstrapTable('refresh');
+                });
+            });
+            $("#btnExport").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var search = $("#table1").bootstrapTable('getOptions').searchText;
+                $.download("/PartManage/Part/Export?field=" + field + "&search=" + search);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "操作列表";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-xs-6">
+                <label>全部菜单</label>
+                <ul class="ztree" id="ztree1"></ul>
+            </div>
+            <div class="col-xs-6">
+                <form class="form-horizontal" id="form1">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="S_Menu_Id" class="control-label">所属菜单</label>
+                            <div>
+                                <input type="text" class="form-control" id="S_Menu_Id" placeholder="菜单" readonly />
+                                <input type="hidden" name="F_Menu_Id" id="F_Menu_Id" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Code" class="control-label">编码</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Code" id="F_Code" placeholder="编码" maxlength="50" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Name" class="control-label">名称</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="姓名" maxlength="50" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Target" class="control-label">目标</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Target" id="F_Target" placeholder="目标" maxlength="50" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Type_Mark" class="control-label">类型标志</label>
+                            <div>
+                                <select class="form-control" name="F_Type_Mark" id="F_Type_Mark" required>
+                                    <option value="">---请选择---</option>
+                                    <option value="1">菜单</option>
+                                    <option value="2">列表</option>
+                                    <option value="3">按钮</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Enable_Mark" class="control-label">有效标记</label>
+                            <div>
+                                <select class="form-control" name="F_Enable_Mark" id="F_Enable_Mark" required>
+                                    <option value="">---请选择---</option>
+                                    <option value="1">有效</option>
+                                    <option value="0">无效</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <div class="text-right">
+                            <input type="submit" class="btn btn-info" value="确定" />
+                            <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Id = $.request("F_Id"), Detial = $.request("Detial"), ztree1;
+            $.getJson({
+                url: "/SystemManage/Action/GetMenu",
+                async: false,
+                success: function (result) {
+                    var setting = {
+                        callback: {
+                            onClick: function onClick(e, treeId, treeNode) {
+                                $("#S_Menu_Id").val(treeNode.name);
+                                $("#F_Menu_Id").val(treeNode.id);
+                            }
+                        }
+                    };
+                    ztree1 = $.fn.zTree.init($("#ztree1"), setting, result);
+                }
+            });
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/SystemManage/Action/GetForm?F_Id=" + F_Id,
+                    async: false,
+                    success: function (result) {
+                        $("#form1").formSerialize(result);
+                        node = ztree1.getNodeByParam("id", result.F_Menu_Id);
+                        ztree1.selectNode(node);
+                        ztree1.setting.callback.onClick(null, null, node);
+                    }
+                });
+            }
+            if (!!Detial) {
+                $("#form1").find('fieldset').attr('disabled', true);
+                $("#form1").find(':submit').remove();
+            }
+            $("#form1").submitForm({
+                url: "/SystemManage/Action/SubmitForm?F_Id=" + F_Id,
+                success: function (result) {
+                    $.currentWindow().find(':button[name="refresh"]').trigger("click");
+                    $.modalClose();
+                }
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

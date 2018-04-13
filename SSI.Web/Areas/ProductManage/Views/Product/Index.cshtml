@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "产品管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section CssLink{
+    <link href="~/Static/bootstrap-table/extensions/tree-column/bootstrap-table-tree-column.css" rel="stylesheet" />
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        @*<button type="button" class="btn btn-default" authorize="Button" id="btnEnable">启用</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDisable">禁用</button>*@
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDownloadImportTpl">下载模板</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnImportExcel">导入模板</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                formatSearch: function () {
+                    return '编码/名称';
+                },
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Name", title: "名称", sortable: true },
+                    { field: "F_Code", title: "编码", sortable: true },
+                    { field: "F_Spec", title: "规格", sortable: true },
+                    { field: "F_Unit", title: "单位", sortable: true },
+                    //{
+                    //    field: "F_Enable_Mark", title: "有效标志",
+                    //    formatter: function (value, row) {
+                    //        switch (value) {
+                    //            case 0:
+                    //                return '<i class="fa fa-times text-danger"></i>';
+                    //            case 1:
+                    //                return '<i class="fa fa-check text-success"></i>';
+                    //            default:
+                    //                return '类型错误';
+                    //        }
+                    //    }
+                    //},
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/ProductManage/Product/Form?Detial=true&F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    content: "/ProductManage/Product/Form",
+                });
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/ProductManage/Product/Form?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/ProductManage/Product/DeleteForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnEnable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/ProductManage/Product/EnableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDisable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/ProductManage/Product/DisableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnExportExcel").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                //var query = $("#table1_query").serializeQuery();
+                $.download("/ProductManage/Product/ExportExcel?field=" + field + "&query=");
+            });
+            $("#btnDownloadImportTpl").on("click", function (e) {
+                $.download("/ProductManage/Product/DownloadData");
+            });
+            //导入模板
+            $("#btnImportExcel").on("click", function (e) {
+                $.upload("/ProductManage/Product/UpdateData", function () {
+                    $("#table1").bootstrapTable('refresh');
+                });
+            });
+        });
+    </script>
+}

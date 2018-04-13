@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "用户列表";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_Real_Name" class="col-sm-3 control-label">姓名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Real_Name" id="F_Real_Name" placeholder="姓名" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Nice_Name" class="col-sm-3 control-label">呢称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Nice_Name" id="F_Nice_Name" placeholder="呢称" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Gender" class="col-sm-3 control-label">性别</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="F_Gender" id="F_Gender" required>
+                                <option value="">---请选择---</option>
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Birthday" class="col-sm-3 control-label">生日</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form_date" name="F_Birthday" id="F_Birthday" placeholder="生日" data-date-format="yyyy-mm-dd" readonly required date=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Phone" class="col-sm-3 control-label">手机</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Phone" id="F_Phone" placeholder="手机" maxlength="11" required digits=true rangelength=[11,11] />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Mail" class="col-sm-3 control-label">邮箱</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Mail" id="F_Mail" placeholder="邮箱" maxlength="50" required email=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_QQ" class="col-sm-3 control-label">QQ</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_QQ" id="F_QQ" placeholder="QQ" maxlength="50" digits=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Wechat" class="col-sm-3 control-label">微信</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Wechat" id="F_Wechat" placeholder="微信" maxlength="50" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Head_Icon" class="col-sm-3 control-label">图片</label>
+                        <div class="col-sm-9">
+                            <img src="" class="img-thumbnail" style="width:200px;height:200px" name="F_Head_Icon_Path" id="F_Head_Icon_Path" />
+                            <hr />
+                            <input type="file" class="file-loading form_file_image" name="F_Head_Icon_File" id="F_Head_Icon_File" />
+                            <span class="help-block">允许类型：(gif,jpg,jpeg,png) 允许大小：(2M)</span>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                        <input type="submit" class="btn btn-info" value="确定" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#form1").formSerialize(top.clientData.user.User);
+            $("#F_Birthday").val($.dataFormat(new Date($("#F_Birthday").val()), "yyyy-MM-dd"));
+            $("#form1").submitForm({
+                url: "/Index/SubmitFormUserInfo",
+                success: function (result) {
+                    $.reload();
+                    $.modalClose();
+                }
+            });
+            $("#btnClose").on("click",function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

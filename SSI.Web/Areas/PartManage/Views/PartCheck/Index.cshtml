@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "零件采购管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <label for="F_Time_Id" class="control-label">盘点时间</label>
+                            <select class="form-control" name="F_Time_Id" id="F_Time_Id" operate="Equal" style="width:200px;" required>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Name" id="F_Part_Name" placeholder="零件名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Code" id="F_Part_Code" placeholder="零件编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Unit" id="F_Part_Unit" placeholder="零件规格" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDownload">下载盘点清单</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnCheck">盘点</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExport">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#F_Time_Id").bindSelect({
+                url: "/PartManage/PartCheck/GetPartCheckTimeList",
+                id: "F_Id",
+                text: "F_Time"
+            });
+            $("#table1").bootstrapTableInit({
+                url: "/PartManage/PartCheck/GetGridList",
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_CHECK_TIME", title: "盘点时间", sortable: true },
+                    { field: "F_PART_NAME", title: "零件名称", sortable: true },
+                    { field: "F_PART_CODE", title: "零件编码", sortable: true },
+                    { field: "F_PART_SPEC", title: "零件规格", sortable: true },
+                    { field: "F_PART_UNIT", title: "零件单位", sortable: true },
+                    { field: "F_QUANTITY", title: "数量", sortable: true },
+                    { field: "F_CREATE_TIME", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnDownload").on("click", function (e) {
+                $.download("/PartManage/PartCheck/Download");
+            });
+            $("#btnCheck").on("click", function (e) {
+                $.modalConfirm("您确定采购零件已入库？", function (r) {
+                    if (r) {
+                        $.modalOpen({
+                            title: "盘点",
+                            area: ['60%', '60%'],
+                            content: "/PartManage/PartCheck/FormCheck"
+                        });
+                    }
+                });
+            });
+            $("#btnExport").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/PartManage/PartCheck/Export?field=" + field + "&query=" + query);
+            });
+        });
+    </script>
+}

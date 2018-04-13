@@ -1,0 +1,38 @@
+﻿@using System.Web.Optimization;
+<!DOCTYPE html>
+<html authorize="Menu" id="menu1">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>零件库存管理系统</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Styles.Render("~/bundles/ssi-css")
+    <link href="~/Static/ssi/css/ui.css" rel="stylesheet" />
+    @RenderSection("CssLink", required: false)
+    @RenderSection("CssPage", required: false)
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/ssi-ie8")
+    <![endif]-->
+</head>
+<body class="no-skin">
+    <div class="main-container" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    @RenderSection("Content", required: true)
+                    @Html.AntiForgeryToken()
+                </div>
+            </div>
+        </div>
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <span class="fa fa-angle-double-up"></span>
+        </a>
+    </div>
+    @Scripts.Render("~/bundles/ssi-js")
+    <script src="~/Static/layer/layer.js"></script>
+    <script src="~/Static/ssi/js/ui.js"></script>
+    <script>$.authorize();</script>
+    @RenderSection("ScriptLink", required: false)
+    @RenderSection("ScriptPage", required: false)
+</body>
+</html>

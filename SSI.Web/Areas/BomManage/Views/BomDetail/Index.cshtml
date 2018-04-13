@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "BOM明细列表";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <label for="F_DATE">BOM版本生效日期：</label>
+                            <input type="text" class="form-control form_date_time" name="F_DATE" id="F_DATE" placeholder="BOM版本生效日期" operate="BeforeDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_VERSION">BOM版本：</label>
+                            <input type="text" class="form-control" name="F_VERSION" id="F_VERSION" placeholder="BOM版本" operate="Equal" />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_NAME">BOM名称：</label>
+                            <input type="text" class="form-control" name="F_NAME" id="F_NAME" placeholder="BOM名称" operate="Equal" />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_BOM_CODE">BOM编码：</label>
+                            <input type="text" class="form-control" name="F_CODE" id="F_CODE" placeholder="BOM编码" operate="Equal" />
+                        </div>
+                        <hr class="hr1" />
+                        <div class="form-group">
+                            <label for="F_PART_NAME">零件名称：</label>
+                            <input type="text" class="form-control" name="F_PART_NAME" id="F_PART_NAME" placeholder="零件名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_PART_CODE">零件编码：</label>
+                            <input type="text" class="form-control" name="F_PART_CODE" id="F_PART_CODE" placeholder="零件编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <label for="F_PART_SPEC">零件规格：</label>
+                            <input type="text" class="form-control" name="F_PART_SPEC" id="F_PART_SPEC" placeholder="零件规格" operate="Like" />
+                        </div>
+                        <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                        <button type="button" class="btn btn-default" onclick="Reset();">重置</button>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        @*<button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>*@
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/BomManage/BomDetail/GetGridList",
+                idField: "F_Id",
+                toolbar: "#table1_toolbar",
+                search: false,
+                showColumns: true,
+                sortName:"F_Id",
+                columns: [
+                    { checkbox: true },
+                    { field: "F_BOM_NAME", title: "BOM名称", sortable: true },
+                    { field: "F_BOM_CODE", title: "BOM编码", sortable: true },
+                    { field: "F_BOM_VERSION", title: "BOM版本", sortable: true },
+                    { field: "F_BOM_DATE", title: "BOM生效日期", sortable: true },
+                    { field: "F_PART_NAME", title: "零件名称", sortable: true },
+                    { field: "F_PART_CODE", title: "零件编码", sortable: true },
+                    { field: "F_PART_SPEC", title: "零件规格", sortable: true },
+                    { field: "F_NUM", title: "BOM零件明细数量", sortable: true },
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/BomManage/BomDetail/Form?Detial=true&F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/BomManage/BomDetail/Form?F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            //$("#btnDelete").on("click", function (e) {
+            //    var row = $("#table1").bootstrapTable('getSelections')[0];
+            //    if (row) {
+            //        $.confirmAjax({
+            //            url: "/BomManage/BomDetail/DeleteForm?F_Id=" + row.F_ID,
+            //            success: function (result) {
+            //                $("#table1").bootstrapTable('refresh');
+            //            }
+            //        });
+            //    } else {
+            //        $.modalAlert("请选中一行数据");
+            //    }
+            //});
+            //导出Excel
+            $("#btnExportExcel").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/BomManage/BomDetail/ExportExcel?field=" + field + "&query=" + query);
+            });
+
+        });
+
+
+        function Reset() {
+            $(".form-group").find('input,select').each(function () {
+                $(this).val('');
+            });
+            $("#table1").bootstrapTable('refresh');
+        }
+
+        //分上下二级查询条件  
+        //当上级查询条件日期、版本、名称或编码满足条件时  拼接二级
+        //上级条件不满足时清空  只查询二级条件
+        $.fn.serializeQuery = function () {
+            var F_DATE = false;
+            var F_BOM_VERSION = false;
+            var F_BOM_NAME = false;
+            var F_BOM_CODE = false;
+            var query = [];
+            var $element = $(this).find("[operate]");
+            $.each($element, function (i, v) {
+                if (!!v.value && ($(v).attr("name") == "F_DATE" || $(v).attr("name") == "F_VERSION" || $(v).attr("name") == "F_NAME" || $(v).attr("name") == "F_CODE")) {
+                    query.push({
+                        ParamType:"1",
+                        ParamName: v.name,
+                        ParamValue: v.value,
+                        Operation: v.attributes['operate'].value
+                    });
+                }
+                if (!!v.value && $(v).attr("name") == "F_DATE") {
+                    F_DATE = true;
+                }
+                if (!!v.value && $(v).attr("name") == "F_VERSION") {
+                    F_BOM_VERSION = true;
+                }
+                if (!!v.value && $(v).attr("name") == "F_NAME") {
+                    F_BOM_NAME = true;
+                }
+                if (!!v.value && $(v).attr("name") == "F_CODE") {
+                    F_BOM_CODE = true;
+                }
+                if (i > 3) {//拼接一级查询条件
+                    if (F_DATE && F_BOM_VERSION && (F_BOM_NAME || F_BOM_CODE)) {
+                        if (!!v.value) {
+                            query.push({
+                                ParamName: v.name,
+                                ParamValue: v.value,
+                                Operation: v.attributes['operate'].value
+                            });
+                        }
+                    } else {//拼接二级条件
+                        if (i==4) {//查询条件为二级条件第一个时清空
+                            query = [];
+                        }
+                        if (!!v.value) {//push二级条件
+                            query.push({
+                                ParamName: v.name,
+                                ParamValue: v.value,
+                                Operation: v.attributes['operate'].value
+                            });
+                        }
+                    }
+                }
+            });
+            return JSON.stringify(query);
+        };//重载ui.js查询条件方法
+    </script>
+}

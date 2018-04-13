@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "组织列表";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-xs-6">
+                <label>全部组织</label>
+                <ul class="ztree" id="ztree1"></ul>
+            </div>
+            <div class="col-xs-6">
+                <form class="form-horizontal" id="form1">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="S_Parent_Id" class="control-label">上级组织</label>
+                            <div>
+                                <input type="text" class="form-control" id="S_Parent_Id" placeholder="上级组织" readonly />
+                                <input type="hidden" name="F_Parent_Id" id="F_Parent_Id" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Name" class="control-label">名称</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="姓名" maxlength="50" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Manager" class="control-label">负责人</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Manager" id="F_Manager" placeholder="负责人" maxlength="50" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Phone" class="control-label">手机</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Phone" id="F_Phone" placeholder="手机" maxlength="11" required digits=true rangelength=[11,11] />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Icon" class="control-label">图标</label>
+                            <div>
+                                <input type="text" class="form-control" name="F_Icon" id="F_Icon" placeholder="图标" maxlength="50" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Type_Mark" class="control-label">类型标志</label>
+                            <div>
+                                <select class="form-control" name="F_Type_Mark" id="F_Type_Mark" required>
+                                    <option value="">---请选择---</option>
+                                    <option value="1">公司</option>
+                                    <option value="2">部门</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="F_Enable_Mark" class="control-label">有效标记</label>
+                            <div>
+                                <select class="form-control" name="F_Enable_Mark" id="F_Enable_Mark" required>
+                                    <option value="">---请选择---</option>
+                                    <option value="1">有效</option>
+                                    <option value="0">无效</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <div class="text-right">
+                            <input type="submit" class="btn btn-info" value="确定" />
+                            <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Id = $.request("F_Id"), F_Parent_Id = $.request("F_Parent_Id"), Detial = $.request("Detial"), ztree1;
+            $.getJson({
+                url: "/SystemManage/Org/GetOrg",
+                async: false,
+                success: function (result) {
+                    var setting = {
+                        callback: {
+                            onClick: function onClick(e, treeId, treeNode) {
+                                $("#S_Parent_Id").val(treeNode.name);
+                                $("#F_Parent_Id").val(treeNode.id);
+                            }
+                        }
+                    };
+                    ztree1 = $.fn.zTree.init($("#ztree1"), setting, result);
+                }
+            });
+            if (!!F_Parent_Id) {
+                node = ztree1.getNodeByParam("id", F_Parent_Id);
+                ztree1.selectNode(node);
+                ztree1.setting.callback.onClick(null, null, node);
+            }
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/SystemManage/Org/GetForm?F_Id=" + F_Id,
+                    async: false,
+                    success: function (result) {
+                        $("#form1").formSerialize(result);
+                        node = ztree1.getNodeByParam("id", result.F_Parent_Id);
+                        ztree1.selectNode(node);
+                        ztree1.setting.callback.onClick(null, null, node);
+                    }
+                });
+            }
+            if (!!Detial) {
+                $("#form1").find('fieldset').attr('disabled', true);
+                $("#form1").find(':submit').remove();
+            }
+            $("#form1").submitForm({
+                url: "/SystemManage/Org/SubmitForm?F_Id=" + F_Id,
+                success: function (result) {
+                    $.currentWindow().find(':button[name="refresh"]').trigger("click");
+                    $.modalClose();
+                }
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,68 @@
+﻿@using System.Web.Optimization;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Styles.Render("~/bundles/ssi-css")
+    <link href="~/Static/ssi/css/ui.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/ssi-ie8")
+    <![endif]-->
+    <style type="text/css">
+        html {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="no-skin">
+    @Html.Partial("_PartialHeader")
+    <div class="main-container" id="main-container">
+        @Html.Partial("_PartialSidebar")
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="content-tabs">
+                    <button class="roll-nav roll-left" onclick="scrollTabLeft()">
+                        <i class="glyphicon glyphicon-backward"></i>
+                    </button>
+                    <nav class="page-tabs menuTabs tab-ui-menu" id="tab-menu">
+                        <div class="page-tabs-content" style="margin-left: 0px;">
+                        </div>
+                    </nav>
+                    <button class="roll-nav roll-right" onclick="scrollTabRight()">
+                        <i class="glyphicon glyphicon-forward" style="margin-left: 3px;"></i>
+                    </button>
+                    <div class="btn-group roll-nav roll-right">
+                        <button class="dropdown tabClose" data-toggle="dropdown">
+                            页签操作<i class="glyphicon glyphicon-triangle-bottom" style="padding-left:3px;"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" style="min-width: 128px;">
+                            <li><a class="tabReload" href="javascript:refreshTab();">刷新当前</a></li>
+                            <li><a class="tabCloseCurrent" href="javascript:closeCurrentTab();">关闭当前</a></li>
+                            <li><a class="tabCloseOther" href="javascript:closeOtherTabs();">关闭其它</a></li>
+                            <li><a class="tabCloseAll" href="javascript:closeOtherTabs(true);">关闭全部</a></li>
+                        </ul>
+                    </div>
+                    <button class="roll-nav roll-right" onclick="handleFullScreen()">
+                        <i class="glyphicon glyphicon-fullscreen"></i>
+                    </button>
+                </div>
+                <div class="content-iframe">
+                    <div class="tab-content" id="tab-content"></div>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_PartialFooter")
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div>
+    @Scripts.Render("~/bundles/ssi-js")
+    <script src="~/Static/layer/layer.js"></script>
+    <script src="~/Static/ssi/js/ui.js"></script>
+    <script src="~/Static/ssi/js/iframe.js"></script>
+    <script src="~/Static/ssi/js/index.js"></script>
+</body>
+</html>

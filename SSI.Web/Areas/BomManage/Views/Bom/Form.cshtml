@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "BOM版本信息";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_Name" class="col-xs-3 control-label">BOM名称</label>
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="BOM名称" maxlength="50" required names=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Product_Name" class="col-xs-3 control-label">产品</label>
+                        <div class="col-xs-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="F_Product_Name" placeholder="产品" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-default" id="btnProductSelect">选择</button>
+                                </span>
+                            </div>
+                            <input type="hidden" name="F_Product_Id" id="F_Product_Id" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Code" class="col-xs-3 control-label">BOM编码</label>
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" name="F_Code" id="F_Code" placeholder="BOM编码" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Version" class="col-xs-3 control-label">BOM版本</label>
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" name="F_Version" id="F_Version" placeholder="BOM版本" maxlength="50" required version=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Date" class="col-xs-3 control-label">BOM生效日期：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form_date" name="F_Date" id="F_Date" placeholder="BOM生效日期" data-date-format="yyyy-mm-dd" readonly required date=true />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-xs-9 col-xs-offset-2 pull-right">
+                        <input type="submit" class="btn btn-info" value="确定" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script type="text/javascript">
+        var Detial = $.request("Detial");
+        var F_Id = $.request("F_Id");
+        $(function () {
+
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/BomManage/Bom/GetForm",
+                    data: { F_Id: F_Id },
+                    type: "get",
+                    async: false,
+                    success: function (data) {
+                        $("#form1").formSerialize(data);
+                        $.getJson({
+                            url: "/ProductManage/Product/GetForm?F_Id=" + $("#F_Product_Id").val(),
+                            async: false,
+                            success: function (result) {
+                                $("#F_Product_Name").val(result.F_Name);
+                            }
+                        });
+                    }
+                });
+            }
+            if (!!Detial) {
+                $("#form1").find('fieldset').attr('disabled', true);
+                $("#form1").find(':submit').remove();
+            }
+            $("#form1").submitForm({
+                url: "/BomManage/Bom/SubmitForm?F_Id=" + F_Id,
+                success: function (result) {
+                    if (result.state == "success") {
+                        $.currentWindow().find(':button[id="btnQuery"]').trigger("click");
+                        $.modalClose();
+                        
+                    }
+                    else {
+                        $.modalAlert(result.msg);
+                    }
+                }
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+            $("#btnProductSelect").on("click", function (e) {
+                $.modalOpen({
+                    title: "产品选择",
+                    area: ['60%', '80%'],
+                    content: "/ProductManage/Product/IndexProduct",
+                });
+            });
+        });
+
+
+
+
+
+
+    </script>
+}

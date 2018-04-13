@@ -1,0 +1,794 @@
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{90CD27C4-34B0-486F-AEB5-C275F9B59895}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SSI.Web</RootNamespace>
+    <AssemblyName>SSI.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Static\bootstrap-datetimepicker\css\bootstrap-datetimepicker.css" />
+    <Content Include="Static\bootstrap-datetimepicker\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Static\bootstrap-datetimepicker\js\bootstrap-datetimepicker.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\bootstrap-datetimepicker.min.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ar.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.az.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.bg.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.bn.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ca.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.cs.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.da.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.de.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ee.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.el.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.es.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.fi.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.fr.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.he.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.hr.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.hu.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.hy.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.id.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.is.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.it.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ja.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ka.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ko.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.lt.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.lv.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ms.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.nb.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.nl.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.no.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.pl.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.pt-BR.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.pt.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ro.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.rs-latin.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.rs.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ru.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sk.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sl.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sv.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.sw.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.th.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.tr.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.ua.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.uk.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="Static\bootstrap-datetimepicker\js\locales\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="Static\ssi\js\index.js" />
+    <Content Include="Static\ssi\js\iframe.js" />
+    <Content Include="Static\ssi\js\ui.js" />
+    <Content Include="Static\AdminLTE\css\AdminLTE.css" />
+    <Content Include="Static\AdminLTE\css\AdminLTE.min.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-bootstrap-social.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-bootstrap-social.min.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-fullcalendar.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-fullcalendar.min.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-select2.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-select2.min.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-without-plugins.css" />
+    <Content Include="Static\AdminLTE\css\alt\AdminLTE-without-plugins.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-black-light.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-black-light.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-black.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-black.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-blue-light.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-blue-light.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-blue.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-blue.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-green-light.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-green-light.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-green.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-green.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-purple-light.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-purple-light.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-purple.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-purple.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-red-light.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-red-light.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-red.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-red.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-yellow-light.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-yellow-light.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-yellow.css" />
+    <Content Include="Static\AdminLTE\css\skins\skin-yellow.min.css" />
+    <Content Include="Static\AdminLTE\css\skins\_all-skins.css" />
+    <Content Include="Static\AdminLTE\css\skins\_all-skins.min.css" />
+    <Content Include="Static\AdminLTE\img\avatar.png" />
+    <Content Include="Static\AdminLTE\img\avatar04.png" />
+    <Content Include="Static\AdminLTE\img\avatar2.png" />
+    <Content Include="Static\AdminLTE\img\avatar3.png" />
+    <Content Include="Static\AdminLTE\img\avatar5.png" />
+    <Content Include="Static\AdminLTE\img\boxed-bg.jpg" />
+    <Content Include="Static\AdminLTE\img\boxed-bg.png" />
+    <Content Include="Static\AdminLTE\img\credit\american-express.png" />
+    <Content Include="Static\AdminLTE\img\credit\cirrus.png" />
+    <Content Include="Static\AdminLTE\img\credit\mastercard.png" />
+    <Content Include="Static\AdminLTE\img\credit\mestro.png" />
+    <Content Include="Static\AdminLTE\img\credit\paypal.png" />
+    <Content Include="Static\AdminLTE\img\credit\paypal2.png" />
+    <Content Include="Static\AdminLTE\img\credit\visa.png" />
+    <Content Include="Static\AdminLTE\img\default-50x50.gif" />
+    <Content Include="Static\AdminLTE\img\icons.png" />
+    <Content Include="Static\AdminLTE\img\photo1.png" />
+    <Content Include="Static\AdminLTE\img\photo2.png" />
+    <Content Include="Static\AdminLTE\img\photo3.jpg" />
+    <Content Include="Static\AdminLTE\img\photo4.jpg" />
+    <Content Include="Static\AdminLTE\img\user1-128x128.jpg" />
+    <Content Include="Static\AdminLTE\img\user2-160x160.jpg" />
+    <Content Include="Static\AdminLTE\img\user3-128x128.jpg" />
+    <Content Include="Static\AdminLTE\img\user4-128x128.jpg" />
+    <Content Include="Static\AdminLTE\img\user5-128x128.jpg" />
+    <Content Include="Static\AdminLTE\img\user6-128x128.jpg" />
+    <Content Include="Static\AdminLTE\img\user7-128x128.jpg" />
+    <Content Include="Static\AdminLTE\img\user8-128x128.jpg" />
+    <Content Include="Static\AdminLTE\js\adminlte.js" />
+    <Content Include="Static\AdminLTE\js\adminlte.min.js" />
+    <Content Include="Static\AdminLTE\js\demo.js" />
+    <Content Include="Static\AdminLTE\js\pages\dashboard.js" />
+    <Content Include="Static\AdminLTE\js\pages\dashboard2.js" />
+    <Content Include="Static\ssi\css\ui.css" />
+    <Content Include="Static\bootstrap-table\bootstrap-table-locale-all.js" />
+    <Content Include="Static\bootstrap-table\bootstrap-table-locale-all.min.js" />
+    <Content Include="Static\bootstrap-table\bootstrap-table.css" />
+    <Content Include="Static\bootstrap-table\bootstrap-table.js" />
+    <Content Include="Static\bootstrap-table\bootstrap-table.min.css" />
+    <Content Include="Static\bootstrap-table\bootstrap-table.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\accent-neutralise\bootstrap-table-accent-neutralise.js" />
+    <Content Include="Static\bootstrap-table\extensions\accent-neutralise\bootstrap-table-accent-neutralise.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\angular\bootstrap-table-angular.js" />
+    <Content Include="Static\bootstrap-table\extensions\angular\bootstrap-table-angular.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\auto-refresh\bootstrap-table-auto-refresh.css" />
+    <Content Include="Static\bootstrap-table\extensions\auto-refresh\bootstrap-table-auto-refresh.js" />
+    <Content Include="Static\bootstrap-table\extensions\auto-refresh\bootstrap-table-auto-refresh.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\click-edit-row\bootstrap-table-click-edit-row.css" />
+    <Content Include="Static\bootstrap-table\extensions\click-edit-row\bootstrap-table-click-edit-row.js" />
+    <Content Include="Static\bootstrap-table\extensions\click-edit-row\bootstrap-table-click-edit-row.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\cookie\bootstrap-table-cookie.js" />
+    <Content Include="Static\bootstrap-table\extensions\cookie\bootstrap-table-cookie.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\copy-rows\bootstrap-table-copy-rows.js" />
+    <Content Include="Static\bootstrap-table\extensions\copy-rows\bootstrap-table-copy-rows.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\editable\bootstrap-table-editable.js" />
+    <Content Include="Static\bootstrap-table\extensions\editable\bootstrap-table-editable.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\export\bootstrap-table-export.js" />
+    <Content Include="Static\bootstrap-table\extensions\export\bootstrap-table-export.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.css" />
+    <Content Include="Static\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.js" />
+    <Content Include="Static\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\filter\bootstrap-table-filter.js" />
+    <Content Include="Static\bootstrap-table\extensions\filter\bootstrap-table-filter.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\flat-json\bootstrap-table-flat-json.js" />
+    <Content Include="Static\bootstrap-table\extensions\flat-json\bootstrap-table-flat-json.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.css" />
+    <Content Include="Static\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.js" />
+    <Content Include="Static\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\group-by\bootstrap-table-group-by.css" />
+    <Content Include="Static\bootstrap-table\extensions\group-by\bootstrap-table-group-by.js" />
+    <Content Include="Static\bootstrap-table\extensions\group-by\bootstrap-table-group-by.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\i18n-enhance\bootstrap-table-i18n-enhance.js" />
+    <Content Include="Static\bootstrap-table\extensions\i18n-enhance\bootstrap-table-i18n-enhance.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\key-events\bootstrap-table-key-events.js" />
+    <Content Include="Static\bootstrap-table\extensions\key-events\bootstrap-table-key-events.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\mobile\bootstrap-table-mobile.js" />
+    <Content Include="Static\bootstrap-table\extensions\mobile\bootstrap-table-mobile.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\multi-column-toggle\bootstrap-table-multi-toggle.js" />
+    <Content Include="Static\bootstrap-table\extensions\multi-column-toggle\bootstrap-table-multi-toggle.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-search\bootstrap-table-multiple-search.js" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-search\bootstrap-table-multiple-search.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-selection-row\bootstrap-table-multiple-selection-row.css" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-selection-row\bootstrap-table-multiple-selection-row.js" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-selection-row\bootstrap-table-multiple-selection-row.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-sort\bootstrap-table-multiple-sort.js" />
+    <Content Include="Static\bootstrap-table\extensions\multiple-sort\bootstrap-table-multiple-sort.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\natural-sorting\bootstrap-table-natural-sorting.js" />
+    <Content Include="Static\bootstrap-table\extensions\natural-sorting\bootstrap-table-natural-sorting.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\print\bootstrap-table-print.js" />
+    <Content Include="Static\bootstrap-table\extensions\print\bootstrap-table-print.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\reorder-columns\bootstrap-table-reorder-columns.js" />
+    <Content Include="Static\bootstrap-table\extensions\reorder-columns\bootstrap-table-reorder-columns.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\reorder-rows\bootstrap-table-reorder-rows.css" />
+    <Content Include="Static\bootstrap-table\extensions\reorder-rows\bootstrap-table-reorder-rows.js" />
+    <Content Include="Static\bootstrap-table\extensions\reorder-rows\bootstrap-table-reorder-rows.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\resizable\bootstrap-table-resizable.js" />
+    <Content Include="Static\bootstrap-table\extensions\resizable\bootstrap-table-resizable.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\select2-filter\bootstrap-table-select2-filter.js" />
+    <Content Include="Static\bootstrap-table\extensions\select2-filter\bootstrap-table-select2-filter.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\sticky-header\bootstrap-table-sticky-header.css" />
+    <Content Include="Static\bootstrap-table\extensions\sticky-header\bootstrap-table-sticky-header.js" />
+    <Content Include="Static\bootstrap-table\extensions\sticky-header\bootstrap-table-sticky-header.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\toolbar\bootstrap-table-toolbar.js" />
+    <Content Include="Static\bootstrap-table\extensions\toolbar\bootstrap-table-toolbar.min.js" />
+    <Content Include="Static\bootstrap-table\extensions\tree-column\bootstrap-table-tree-column.css" />
+    <Content Include="Static\bootstrap-table\extensions\tree-column\bootstrap-table-tree-column.js" />
+    <Content Include="Static\bootstrap-table\extensions\tree-column\bootstrap-table-tree-column.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-af-ZA.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-af-ZA.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ar-SA.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ar-SA.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ca-ES.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ca-ES.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-cs-CZ.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-cs-CZ.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-da-DK.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-da-DK.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-de-DE.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-de-DE.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-el-GR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-el-GR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-en-US.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-en-US.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-AR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-AR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-CL.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-CL.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-CR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-CR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-ES.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-ES.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-MX.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-MX.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-NI.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-NI.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-SP.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-es-SP.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-et-EE.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-et-EE.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-fa-IR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-fa-IR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-fr-BE.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-fr-BE.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-fr-FR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-fr-FR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-he-IL.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-he-IL.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-hr-HR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-hr-HR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-hu-HU.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-hu-HU.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-id-ID.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-id-ID.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-it-IT.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-it-IT.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ja-JP.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ja-JP.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ka-GE.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ka-GE.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ko-KR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ko-KR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ms-MY.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ms-MY.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-nb-NO.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-nb-NO.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-nl-NL.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-nl-NL.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-pl-PL.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-pl-PL.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-pt-BR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-pt-BR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-pt-PT.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-pt-PT.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ro-RO.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ro-RO.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ru-RU.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ru-RU.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-sk-SK.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-sk-SK.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-sv-SE.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-sv-SE.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-th-TH.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-th-TH.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-tr-TR.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-tr-TR.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-uk-UA.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-uk-UA.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ur-PK.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-ur-PK.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-uz-Latn-UZ.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-uz-Latn-UZ.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-vi-VN.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-vi-VN.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-CN.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-CN.min.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-TW.js" />
+    <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-TW.min.js" />
+    <Content Include="Static\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Static\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Static\bootstrap\css\bootstrap.css" />
+    <Content Include="Static\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Static\bootstrap\js\bootstrap.js" />
+    <Content Include="Static\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Static\bootstrap\js\npm.js" />
+    <Content Include="Static\js.cookie.js" />
+    <Content Include="Static\select2\css\select2.css" />
+    <Content Include="Static\select2\css\select2.min.css" />
+    <Content Include="Static\select2\js\i18n\af.js" />
+    <Content Include="Static\select2\js\i18n\ar.js" />
+    <Content Include="Static\select2\js\i18n\az.js" />
+    <Content Include="Static\select2\js\i18n\bg.js" />
+    <Content Include="Static\select2\js\i18n\bs.js" />
+    <Content Include="Static\select2\js\i18n\ca.js" />
+    <Content Include="Static\select2\js\i18n\cs.js" />
+    <Content Include="Static\select2\js\i18n\da.js" />
+    <Content Include="Static\select2\js\i18n\de.js" />
+    <Content Include="Static\select2\js\i18n\dsb.js" />
+    <Content Include="Static\select2\js\i18n\el.js" />
+    <Content Include="Static\select2\js\i18n\en.js" />
+    <Content Include="Static\select2\js\i18n\es.js" />
+    <Content Include="Static\select2\js\i18n\et.js" />
+    <Content Include="Static\select2\js\i18n\eu.js" />
+    <Content Include="Static\select2\js\i18n\fa.js" />
+    <Content Include="Static\select2\js\i18n\fi.js" />
+    <Content Include="Static\select2\js\i18n\fr.js" />
+    <Content Include="Static\select2\js\i18n\gl.js" />
+    <Content Include="Static\select2\js\i18n\he.js" />
+    <Content Include="Static\select2\js\i18n\hi.js" />
+    <Content Include="Static\select2\js\i18n\hr.js" />
+    <Content Include="Static\select2\js\i18n\hsb.js" />
+    <Content Include="Static\select2\js\i18n\hu.js" />
+    <Content Include="Static\select2\js\i18n\hy.js" />
+    <Content Include="Static\select2\js\i18n\id.js" />
+    <Content Include="Static\select2\js\i18n\is.js" />
+    <Content Include="Static\select2\js\i18n\it.js" />
+    <Content Include="Static\select2\js\i18n\ja.js" />
+    <Content Include="Static\select2\js\i18n\km.js" />
+    <Content Include="Static\select2\js\i18n\ko.js" />
+    <Content Include="Static\select2\js\i18n\lt.js" />
+    <Content Include="Static\select2\js\i18n\lv.js" />
+    <Content Include="Static\select2\js\i18n\mk.js" />
+    <Content Include="Static\select2\js\i18n\ms.js" />
+    <Content Include="Static\select2\js\i18n\nb.js" />
+    <Content Include="Static\select2\js\i18n\nl.js" />
+    <Content Include="Static\select2\js\i18n\pl.js" />
+    <Content Include="Static\select2\js\i18n\ps.js" />
+    <Content Include="Static\select2\js\i18n\pt-BR.js" />
+    <Content Include="Static\select2\js\i18n\pt.js" />
+    <Content Include="Static\select2\js\i18n\ro.js" />
+    <Content Include="Static\select2\js\i18n\ru.js" />
+    <Content Include="Static\select2\js\i18n\sk.js" />
+    <Content Include="Static\select2\js\i18n\sl.js" />
+    <Content Include="Static\select2\js\i18n\sr-Cyrl.js" />
+    <Content Include="Static\select2\js\i18n\sr.js" />
+    <Content Include="Static\select2\js\i18n\sv.js" />
+    <Content Include="Static\select2\js\i18n\th.js" />
+    <Content Include="Static\select2\js\i18n\tr.js" />
+    <Content Include="Static\select2\js\i18n\uk.js" />
+    <Content Include="Static\select2\js\i18n\vi.js" />
+    <Content Include="Static\select2\js\i18n\zh-CN.js" />
+    <Content Include="Static\select2\js\i18n\zh-TW.js" />
+    <Content Include="Static\select2\js\select2.full.js" />
+    <Content Include="Static\select2\js\select2.full.min.js" />
+    <Content Include="Static\select2\js\select2.js" />
+    <Content Include="Static\select2\js\select2.min.js" />
+    <Content Include="Static\font-awesome\css\font-awesome.css" />
+    <Content Include="Static\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Static\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Static\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="Static\html5-ie8\html5shiv.min.js" />
+    <Content Include="Static\html5-ie8\respond.min.js" />
+    <Content Include="Static\jquery-validation\additional-methods.js" />
+    <Content Include="Static\jquery-validation\additional-methods.min.js" />
+    <Content Include="Static\jquery-validation\jquery.validate.js" />
+    <Content Include="Static\jquery-validation\jquery.validate.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ar.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ar.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_az.js" />
+    <Content Include="Static\jquery-validation\localization\messages_az.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_bg.js" />
+    <Content Include="Static\jquery-validation\localization\messages_bg.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_bn_BD.js" />
+    <Content Include="Static\jquery-validation\localization\messages_bn_BD.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ca.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ca.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_cs.js" />
+    <Content Include="Static\jquery-validation\localization\messages_cs.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_da.js" />
+    <Content Include="Static\jquery-validation\localization\messages_da.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_de.js" />
+    <Content Include="Static\jquery-validation\localization\messages_de.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_el.js" />
+    <Content Include="Static\jquery-validation\localization\messages_el.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_es.js" />
+    <Content Include="Static\jquery-validation\localization\messages_es.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_es_AR.js" />
+    <Content Include="Static\jquery-validation\localization\messages_es_AR.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_es_PE.js" />
+    <Content Include="Static\jquery-validation\localization\messages_es_PE.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_et.js" />
+    <Content Include="Static\jquery-validation\localization\messages_et.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_eu.js" />
+    <Content Include="Static\jquery-validation\localization\messages_eu.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_fa.js" />
+    <Content Include="Static\jquery-validation\localization\messages_fa.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_fi.js" />
+    <Content Include="Static\jquery-validation\localization\messages_fi.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_fr.js" />
+    <Content Include="Static\jquery-validation\localization\messages_fr.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ge.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ge.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_gl.js" />
+    <Content Include="Static\jquery-validation\localization\messages_gl.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_he.js" />
+    <Content Include="Static\jquery-validation\localization\messages_he.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_hr.js" />
+    <Content Include="Static\jquery-validation\localization\messages_hr.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_hu.js" />
+    <Content Include="Static\jquery-validation\localization\messages_hu.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_hy_AM.js" />
+    <Content Include="Static\jquery-validation\localization\messages_hy_AM.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_id.js" />
+    <Content Include="Static\jquery-validation\localization\messages_id.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_is.js" />
+    <Content Include="Static\jquery-validation\localization\messages_is.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_it.js" />
+    <Content Include="Static\jquery-validation\localization\messages_it.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ja.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ja.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ka.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ka.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_kk.js" />
+    <Content Include="Static\jquery-validation\localization\messages_kk.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ko.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ko.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_lt.js" />
+    <Content Include="Static\jquery-validation\localization\messages_lt.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_lv.js" />
+    <Content Include="Static\jquery-validation\localization\messages_lv.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_mk.js" />
+    <Content Include="Static\jquery-validation\localization\messages_mk.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_my.js" />
+    <Content Include="Static\jquery-validation\localization\messages_my.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_nl.js" />
+    <Content Include="Static\jquery-validation\localization\messages_nl.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_no.js" />
+    <Content Include="Static\jquery-validation\localization\messages_no.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_pl.js" />
+    <Content Include="Static\jquery-validation\localization\messages_pl.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_pt_BR.js" />
+    <Content Include="Static\jquery-validation\localization\messages_pt_BR.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_pt_PT.js" />
+    <Content Include="Static\jquery-validation\localization\messages_pt_PT.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ro.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ro.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ru.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ru.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sd.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sd.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_si.js" />
+    <Content Include="Static\jquery-validation\localization\messages_si.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sk.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sk.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sl.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sl.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sr.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sr.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sr_lat.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sr_lat.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sv.js" />
+    <Content Include="Static\jquery-validation\localization\messages_sv.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_th.js" />
+    <Content Include="Static\jquery-validation\localization\messages_th.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_tj.js" />
+    <Content Include="Static\jquery-validation\localization\messages_tj.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_tr.js" />
+    <Content Include="Static\jquery-validation\localization\messages_tr.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_uk.js" />
+    <Content Include="Static\jquery-validation\localization\messages_uk.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ur.js" />
+    <Content Include="Static\jquery-validation\localization\messages_ur.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_vi.js" />
+    <Content Include="Static\jquery-validation\localization\messages_vi.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_zh.js" />
+    <Content Include="Static\jquery-validation\localization\messages_zh.min.js" />
+    <Content Include="Static\jquery-validation\localization\messages_zh_TW.js" />
+    <Content Include="Static\jquery-validation\localization\messages_zh_TW.min.js" />
+    <Content Include="Static\jquery-validation\localization\methods_de.js" />
+    <Content Include="Static\jquery-validation\localization\methods_de.min.js" />
+    <Content Include="Static\jquery-validation\localization\methods_es_CL.js" />
+    <Content Include="Static\jquery-validation\localization\methods_es_CL.min.js" />
+    <Content Include="Static\jquery-validation\localization\methods_fi.js" />
+    <Content Include="Static\jquery-validation\localization\methods_fi.min.js" />
+    <Content Include="Static\jquery-validation\localization\methods_nl.js" />
+    <Content Include="Static\jquery-validation\localization\methods_nl.min.js" />
+    <Content Include="Static\jquery-validation\localization\methods_pt.js" />
+    <Content Include="Static\jquery-validation\localization\methods_pt.min.js" />
+    <Content Include="Static\jquery.form.min.js" />
+    <Content Include="Static\jquery.min.js" />
+    <Content Include="Static\layer\layer.js" />
+    <Content Include="Static\layer\mobile\layer.js" />
+    <Content Include="Static\layer\mobile\need\layer.css" />
+    <Content Include="Static\layer\theme\default\icon-ext.png" />
+    <Content Include="Static\layer\theme\default\icon.png" />
+    <Content Include="Static\layer\theme\default\layer.css" />
+    <Content Include="Static\layer\theme\default\loading-0.gif" />
+    <Content Include="Static\layer\theme\default\loading-1.gif" />
+    <Content Include="Static\layer\theme\default\loading-2.gif" />
+    <Content Include="Static\zTree\css\awesomeStyle\awesome.css" />
+    <Content Include="Static\zTree\css\awesomeStyle\img\loading.gif" />
+    <Content Include="Static\zTree\css\demo.css" />
+    <Content Include="Static\zTree\css\metroStyle\img\line_conn.png" />
+    <Content Include="Static\zTree\css\metroStyle\img\loading.gif" />
+    <Content Include="Static\zTree\css\metroStyle\img\metro.gif" />
+    <Content Include="Static\zTree\css\metroStyle\img\metro.png" />
+    <Content Include="Static\zTree\css\metroStyle\metroStyle.css" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\1_close.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\1_open.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\2.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\3.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\4.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\5.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\6.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\7.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\8.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\diy\9.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\line_conn.gif" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\loading.gif" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\zTreeStandard.gif" />
+    <Content Include="Static\zTree\css\zTreeStyle\img\zTreeStandard.png" />
+    <Content Include="Static\zTree\css\zTreeStyle\zTreeStyle.css" />
+    <Content Include="Static\zTree\js\jquery-1.4.4.min.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.all.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.all.min.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.core.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.core.min.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.excheck.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.excheck.min.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.exedit.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.exedit.min.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.exhide.js" />
+    <Content Include="Static\zTree\js\jquery.ztree.exhide.min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\App\UserLogApp.cs" />
+    <Compile Include="App_Start\Attribute\AuthActionAttribute.cs" />
+    <Compile Include="App_Start\Attribute\AuthLoginAttribute.cs" />
+    <Compile Include="App_Start\Attribute\HttpAjaxAttribute.cs" />
+    <Compile Include="App_Start\Attribute\AuthIndexAttribute.cs" />
+    <Compile Include="App_Start\Config\BundleConfig.cs" />
+    <Compile Include="App_Start\Config\FilterConfig.cs" />
+    <Compile Include="App_Start\Controller\BaseController.cs" />
+    <Compile Include="App_Start\Config\RouteConfig.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\OrgController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\RoleController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\UserController.cs" />
+    <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
+    <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="Configs\appSettings.config" />
+    <Content Include="Configs\connectionStrings.config" />
+    <Content Include="Areas\SystemManage\Views\web.config" />
+    <Content Include="Areas\SystemManage\Views\User\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Role\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\User\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Role\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Org\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Org\Form.cshtml" />
+    <None Include="packages.config" />
+    <Content Include="Views\Index\Default.cshtml" />
+    <Content Include="Static\AdminLTE\css\adminlte.css.map" />
+    <Content Include="Static\AdminLTE\css\adminlte.min.css.map" />
+    <Content Include="Static\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="Static\bootstrap\css\bootstrap-theme.min.css.map" />
+    <Content Include="Static\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Static\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Static\font-awesome\.bower.json" />
+    <Content Include="Static\font-awesome\.gitignore" />
+    <Content Include="Static\font-awesome\.npmignore" />
+    <Content Include="Static\font-awesome\bower.json" />
+    <Content Include="Static\font-awesome\css\font-awesome.css.map" />
+    <Content Include="Static\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Static\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Static\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Static\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Static\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Static\font-awesome\less\animated.less" />
+    <Content Include="Static\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Static\font-awesome\less\core.less" />
+    <Content Include="Static\font-awesome\less\fixed-width.less" />
+    <Content Include="Static\font-awesome\less\font-awesome.less" />
+    <Content Include="Static\font-awesome\less\icons.less" />
+    <Content Include="Static\font-awesome\less\larger.less" />
+    <Content Include="Static\font-awesome\less\list.less" />
+    <Content Include="Static\font-awesome\less\mixins.less" />
+    <Content Include="Static\font-awesome\less\path.less" />
+    <Content Include="Static\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Static\font-awesome\less\screen-reader.less" />
+    <Content Include="Static\font-awesome\less\stacked.less" />
+    <Content Include="Static\font-awesome\less\variables.less" />
+    <Content Include="Static\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Static\font-awesome\scss\_animated.scss" />
+    <Content Include="Static\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Static\font-awesome\scss\_core.scss" />
+    <Content Include="Static\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Static\font-awesome\scss\_icons.scss" />
+    <Content Include="Static\font-awesome\scss\_larger.scss" />
+    <Content Include="Static\font-awesome\scss\_list.scss" />
+    <Content Include="Static\font-awesome\scss\_mixins.scss" />
+    <Content Include="Static\font-awesome\scss\_path.scss" />
+    <Content Include="Static\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Static\font-awesome\scss\_screen-reader.scss" />
+    <Content Include="Static\font-awesome\scss\_stacked.scss" />
+    <Content Include="Static\font-awesome\scss\_variables.scss" />
+    <Content Include="Views\Shared\_PartialControl.cshtml" />
+    <Content Include="Views\Shared\_PartialFooter.cshtml" />
+    <Content Include="Views\Shared\_PartialHeader.cshtml" />
+    <Content Include="Views\Shared\_PartialSidebar.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Index\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutIndex.cshtml" />
+    <Content Include="Views\Shared\_LayoutForm.cshtml" />
+    <Content Include="Static\zTree\css\awesomeStyle\awesome.less" />
+    <Content Include="Static\zTree\css\awesomeStyle\fa.less" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SSI.Business\SSI.Business.csproj">
+      <Project>{644D58B9-1467-416C-B031-00B6F4B385D4}</Project>
+      <Name>SSI.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SSI.Entity\SSI.Entity.csproj">
+      <Project>{FE90ED79-3221-4C96-9361-9019A17BE9F7}</Project>
+      <Name>SSI.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SSI.Repository\SSI.Repository.csproj">
+      <Project>{1848EFAD-3F70-4E52-8BD8-E952DC127F4D}</Project>
+      <Name>SSI.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SSI.Utilities\SSI.Utilities.csproj">
+      <Project>{F86503F6-B47F-4998-876F-4B325D8A0147}</Project>
+      <Name>SSI.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57099</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8000/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

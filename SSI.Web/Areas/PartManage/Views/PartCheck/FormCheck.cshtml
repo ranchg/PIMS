@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "零件盘点管理";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_End_Date" class="col-sm-3 control-label">盘点时间</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Time" id="F_Time" placeholder="盘点时间" readonly required date=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Check_List" class="col-sm-3 control-label">盘点清单</label>
+                        <div class="col-sm-9">
+                            <input type="file" name="F_Check_List" id="F_Check_List" required extension="xls|xlsx" />
+                            <span class="help-block">允许文件后缀：(xls|xlsx)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <div class="alert alert-danger">本次操作将更新全部库存数据！</div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                        <input type="submit" class="btn btn-info" value="确定" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $('#F_Time').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii:00',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 0,
+                maxView: 4,
+                forceParse: 0
+            });
+            $("#form1").submitForm({
+                url: "/PartManage/PartCheck/SubmitFormCheck",
+                success: function (result) {
+                    $.currentWindow()[0].location.reload();
+                    $.modalClose();
+                }
+            });
+            $("#btnClose").on("click",function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

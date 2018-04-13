@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "BOM明细信息";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_BOM_NAME" class="col-xs-3 control-label">BOM名称</label>
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" name="F_BOM_NAME" id="F_BOM_NAME" placeholder="BOM名称" maxlength="50" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_PART_NAME" class="col-xs-3 control-label">零件名称</label>
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" name="F_PART_NAME" id="F_PART_NAME" placeholder="零件名称" maxlength="50" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_PART_NUM" class="col-xs-3 control-label">零件数量</label>
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" name="F_PART_NUM" id="F_PART_NUM" placeholder="零件数量" maxlength="50" readonly="readonly" required isnum=true />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-xs-9 col-xs-offset-2 pull-right">
+                        <input type="submit" class="btn btn-info" value="确定" id="btnSubmit" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script type="text/javascript">
+        var Detial = $.request("Detial");
+        var F_Id = $.request("F_Id");
+        $(function () {
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/BomManage/BomDetail/GetForm",
+                    data: { F_Id: F_Id },
+                    type: "get",
+                    async: false,
+                    success: function (data) {
+                        if (data.length>0) {
+                            $("#F_BOM_NAME").val(data[0].F_BOM_NAME);
+                            $("#F_PART_NAME").val(data[0].F_PART_NAME);
+                            $("#F_PART_NUM").val(data[0].F_PART_NUM);
+                        }
+                    }
+                });
+            }
+            if (!Detial) {
+                $("#F_PART_NUM").removeAttr("readonly");
+            }
+            
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+
+        $("#btnSubmit").on("click", function (e) {
+            $.ajax({
+                type: "post",
+                url: "/BomManage/BomDetail/SubmitForm?F_Id=" + F_Id + "&F_Num=" + $("#F_PART_NUM").val(),
+                success: function (result) {
+                    if (result.state == "success") {
+                        $.parentLayerWindow().find(':button[id="btnQuery"]').trigger("click");
+                        $.currentWindow().find(':button[id="btnQuery"]').trigger("click");
+                        $.modalClose();
+                    }
+                    else {
+                        $.modalAlert(result.msg);
+                    }
+                }
+            });
+
+        });
+        
+
+
+
+        
+
+
+
+
+
+    </script>
+}

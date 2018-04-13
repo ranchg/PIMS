@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "产品生产管理";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section CssLink{
+    <link href="~/Static/ssi/css/cityPicker.css" rel="stylesheet" />
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_Product_Name" class="col-sm-3 control-label">所属产品</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="F_Product_Name" placeholder="所属产品" readonly />
+                        </div>
+                    </div>
+                    <input type="hidden" name="F_Product_Id" id="F_Product_Id" required />
+                    <div class="form-group">
+                        <label for="F_Quantity" class="col-sm-3 control-label">数量</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="F_Quantity" id="F_Quantity" placeholder="数量" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Make_Date" class="col-sm-3 control-label">生产日期</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form_date" name="F_Make_Date" id="F_Make_Date" placeholder="生产日期" required readonly />
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <label for="F_Enable_Mark" class="col-sm-3 control-label">有效标记</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="F_Enable_Mark" id="F_Enable_Mark" required>
+                                <option value="">---请选择---</option>
+                                <option value="1">有效</option>
+                                <option value="0">无效</option>
+                            </select>
+                        </div>
+                    </div>*@
+                </fieldset>
+                <div class="form-group">
+                    <div class="text-right">
+                        <input type="submit" class="btn btn-info" value="确定" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Id = $.request("F_Id"), Detial = $.request("Detial");
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/ProductManage/ProductMake/GetForm?F_Id=" + F_Id,
+                    async: false,
+                    success: function (result) {
+                        $("#form1").formSerialize(result);
+                        $("#F_Product_Name").val(result.F_Product_Name);
+                    }
+                });
+            }
+            if (!!Detial) {
+                $("#form1").find('fieldset').attr('disabled', true);
+                $("#form1").find(':submit').remove();
+            }
+            $("#form1").submitForm({
+                url: "/ProductManage/ProductMake/SubmitForm?F_Id=" + F_Id,
+                success: function (result) {
+                    $.currentWindow().find(':button[name="refresh"]').trigger("click");
+                    $.modalClose();
+                }
+            });
+
+            $("#F_Product_Name").on("focus", function (e) {
+                $.modalOpen({
+                    title: "产品选择",
+                    area: ['60%', '80%'],
+                    content: "/ProductManage/ProductMake/IndexProduct",
+                });
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

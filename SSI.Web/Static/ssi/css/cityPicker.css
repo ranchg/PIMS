@@ -1,0 +1,36 @@
+﻿.ssi-city-picker-panel{
+	position: absolute;
+	width: 370px;
+	z-index: 999999;
+}
+
+#panel-content-province .panel-content-label{
+    display: block;
+	
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	position: relative;
+    color:blue;
+    float:left;
+    margin:5px;
+    cursor: pointer;
+}
+#panel-content-province .panel-content-label:hover{
+    color: #ff00ff;
+}
+#panel-content-city .panel-content-label{
+    display: block;
+	
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	position: relative;
+	color:blue;
+    float:left;
+    margin:5px;
+    cursor: pointer;
+}
+#panel-content-city .panel-content-label:hover{
+    color: #ff00ff;
+}

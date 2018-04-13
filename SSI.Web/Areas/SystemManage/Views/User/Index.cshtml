@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "用户列表";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEnable">启用</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDisable">禁用</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAuthorize">角色授权</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnReset">密码重置</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/SystemManage/User/GetGridList",
+                formatSearch: function() {
+                    return '帐号/姓名';
+                },
+                columns: [
+                    { checkbox: true },
+                    { field: "F_Account", title: "帐号", sortable: true },
+                    { field: "F_Real_Name", title: "姓名", sortable: true },
+                    { field: "F_Phone", title: "电话", sortable: true },
+                    { field: "F_Mail", title: "邮箱", sortable: true },
+                    {
+                        field: "F_Enable_Mark", title: "有效标志", sortable: true,
+                        formatter: function (value, row) {
+                            if (value == 1) {
+                                return '<i class="fa fa-check text-success"></i> ';
+                            } else {
+                                return '<i class="fa fa-times text-danger"></i> ';
+                            }
+                        }
+                    },
+                    { field: "F_Create_Time", title: "创建时间", sortable: true }
+                ]
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/SystemManage/User/Form?Detial=true&F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    content: "/SystemManage/User/Form"
+                });
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/SystemManage/User/Form?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/User/DeleteForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnEnable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/User/EnableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDisable").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/User/DisableForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAuthorize").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "角色授权",
+                        area: ['400px', '90%'],
+                        content: "/SystemManage/User/Authorize?F_Id=" + row.F_Id
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnReset").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/SystemManage/User/ResetForm?F_Id=" + row.F_Id,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+        });
+    </script>
+}
