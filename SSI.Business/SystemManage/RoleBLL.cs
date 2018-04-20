@@ -22,7 +22,7 @@ namespace SSI.Business.SystemManage
             {
                 where += string.Format(" AND (F_ORG_NAME LIKE '%{0}%' OR F_NAME LIKE '%{0}%')", gp.search);
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindTablePageBySql(sql, ref gp);
         }
 

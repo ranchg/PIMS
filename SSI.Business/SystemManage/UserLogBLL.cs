@@ -18,7 +18,7 @@ namespace SSI.Business.SystemManage
             {
                 where += ConditionBuilder.GetWhereSql2(gp.query.JsonToList<Condition>());
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindListPageBySql(sql, ref gp);
         }
 
@@ -60,7 +60,7 @@ namespace SSI.Business.SystemManage
             {
                 where += ConditionBuilder.GetWhereSql2(query.JsonToList<Condition>());
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindTableBySql(sql);
         }
 

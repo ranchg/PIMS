@@ -11,12 +11,13 @@
             <div class="box">
                 <div class="box-body table-responsive">
                     <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnStock">零件实时库存</button>
                         <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
                         <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
                         <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
                         <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
                         @*<button type="button" class="btn btn-default" authorize="Button" id="btnEnable">启用</button>
-                        <button type="button" class="btn btn-default" authorize="Button" id="btnDisable">禁用</button>*@
+                            <button type="button" class="btn btn-default" authorize="Button" id="btnDisable">禁用</button>*@
                         <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
                         <button type="button" class="btn btn-default" authorize="Button" id="btnDownloadImportTpl">下载模板</button>
                         <button type="button" class="btn btn-default" authorize="Button" id="btnImportExcel">导入模板</button>
@@ -136,6 +137,18 @@
                 $.upload("/ProductManage/Product/UpdateData", function () {
                     $("#table1").bootstrapTable('refresh');
                 });
+            });
+            $("#btnStock").on("focus", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "零件实时库存",
+                        area: ['60%', '80%'],
+                        content: "/ProductManage/Product/PartStockList?F_Product_Id=" + row.F_Id,
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
             });
         });
     </script>

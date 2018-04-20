@@ -875,13 +875,11 @@
     <Content Include="Areas\ProductManage\Views\Product\Index.cshtml" />
     <Content Include="Areas\BomManage\Views\BomDetail\Form.cshtml" />
     <Content Include="Areas\PartManage\Views\PartBuy\IndexPart.cshtml" />
-    <Content Include="Areas\PartManage\Views\PartCheck\Index.cshtml" />
-    <Content Include="Areas\PartManage\Views\PartCheck\FormCheck.cshtml" />
     <Content Include="Areas\BomManage\Views\Bom\Detail.cshtml" />
     <Content Include="Areas\ProductManage\Views\web.config" />
     <Content Include="Areas\PartManage\Views\PartStock\Index.cshtml" />
     <Content Include="Areas\ProductManage\Views\ProductMake\IndexProduct.cshtml" />
-    <Content Include="Areas\ProductManage\Views\Product\IndexProduct.cshtml" />
+    <Content Include="Areas\ProductManage\Views\Product\PartStockList.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

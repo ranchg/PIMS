@@ -568,14 +568,14 @@ namespace SSI.DataAccess
         {
             string strSql = DatabaseCommon.SelectSql<T>().ToString();
             querySql = string.IsNullOrEmpty(orderField) == true ? strSql : strSql + " order by " + orderField + " " + orderType;
-            return OracleHelper.GetPageList<T>(strSql, orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageList<T>(strSql, orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public List<T> FindListPage<T>(string WhereSql, string orderField, string orderType, int pageIndex, int pageSize, ref int recordCount) where T : new()
         {
             StringBuilder builder = DatabaseCommon.SelectSql<T>();
             builder.Append(WhereSql);
-            return OracleHelper.GetPageList<T>(builder.ToString(), orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageList<T>(builder.ToString(), orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public List<T> FindListPage<T>(string WhereSql, DbParameter[] parameters, string orderField, string orderType, int pageIndex, int pageSize, ref int recordCount, out string querySql) where T : new()
@@ -584,17 +584,17 @@ namespace SSI.DataAccess
             builder.Append(WhereSql);
             string strSql = builder.ToString();
             querySql = string.IsNullOrEmpty(orderField) == true ? strSql : strSql + " order by " + orderField + " " + orderType;
-            return OracleHelper.GetPageList<T>(strSql, parameters, orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageList<T>(strSql, parameters, orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public List<T> FindListPageBySql<T>(string strSql, string orderField, string orderType, int pageIndex, int pageSize, ref int recordCount)
         {
-            return OracleHelper.GetPageList<T>(strSql, orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageList<T>(strSql, orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public List<T> FindListPageBySql<T>(string strSql, DbParameter[] parameters, string orderField, string orderType, int pageIndex, int pageSize, ref int recordCount)
         {
-            return OracleHelper.GetPageList<T>(strSql, parameters, orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageList<T>(strSql, parameters, orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public List<T> FindListTop<T>(int Top) where T : new()
@@ -729,12 +729,12 @@ namespace SSI.DataAccess
 
         public DataTable FindTablePageBySql(string strSql, string orderField, string orderType, int pageIndex, int pageSize, ref int recordCount)
         {
-            return OracleHelper.GetPageTable(strSql, orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageTable(strSql, orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public DataTable FindTablePageBySql(string strSql, DbParameter[] parameters, string orderField, string orderType, int pageIndex, int pageSize, ref int recordCount)
         {
-            return OracleHelper.GetPageTable(strSql, parameters, orderField, orderType, pageIndex, pageSize, ref recordCount);
+            return SqlServerHelper.GetPageTable(strSql, parameters, orderField, orderType, pageIndex, pageSize, ref recordCount);
         }
 
         public DataTable FindTableTop<T>(int Top) where T : new()

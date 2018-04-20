@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section CssLink{
+    <link href="~/Static/bootstrap-table/extensions/tree-column/bootstrap-table-tree-column.css" rel="stylesheet" />
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Name" id="F_Part_Name" placeholder="零件名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Code" id="F_Part_Code" placeholder="零件编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Part_Unit" id="F_Part_Unit" placeholder="零件规格" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExportExcel">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url:'/ProductManage/Product/GetGridPartSotckList?F_Product_Id=@Request["F_Product_Id"]',
+                sortName: "F_PART_NAME",
+                sortOrder: "ASC",
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_PART_NAME", title: "零件名称", sortable: true },
+                    { field: "F_PART_CODE", title: "零件编码", sortable: true },
+                    { field: "F_PART_SPEC", title: "零件规格", sortable: true },
+                    { field: "F_PART_UNIT", title: "零件单位", sortable: true },
+                    { field: "F_CHECK_TIME", title: "盘点时间", sortable: true },
+                    { field: "F_CHECK_QUANTITY", title: "盘点数量", sortable: true },
+                    { field: "F_CONSUME_QUANTITY", title: "消耗数量", sortable: true },
+                    { field: "F_REACH_QUANTITY", title: "到货数量", sortable: true },
+                    { field: "F_ONWAY_QUANTITY", title: "在途数量", sortable: true },
+                    {
+                        field: "F_AVAILABLE_QUANTITY", title: "可用数量", sortable: true,
+                        formatter: function (value, row) {
+                            if (value < 0) {
+                                return '<strong class="text-danger">' + value + '</strong> ';
+                            } else if (value > 0) {
+                                return '<strong class="text-success">' + value + '</strong> ';
+                            } else {
+                                return '<strong class="text-warning">' + value + '</strong> ';
+                            }
+                        }
+                    }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnExportExcel").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/ProductManage/Product/ExportPartStockExcel?field=" + field + "&query=" + query+"&F_Product_Id=@Request["F_Product_Id"]");
+            });
+        });
+    </script>
+}

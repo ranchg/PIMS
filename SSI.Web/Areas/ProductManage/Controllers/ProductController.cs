@@ -1,4 +1,5 @@
-﻿using SSI.Business.ProductManage;
+﻿using SSI.Business.PartManage;
+using SSI.Business.ProductManage;
 using SSI.Entity.ProductManage;
 using SSI.Utilities;
 using System;
@@ -30,6 +31,24 @@ namespace SSI.Web.Areas.ProductManage.Controllers
             return Content(data.ToJson());
         }
         /// <summary>
+        /// 查询操作
+        /// </summary>
+        /// <param name="gp"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpAjax]
+        [AuthAction]
+        public ActionResult GetGridPartSotckList(GridParam gp,string F_Product_Id)
+        {
+            var data = new
+            {
+                rows = new PartStockBLL().GetGridList(gp, F_Product_Id),
+                total = gp.total,
+                F_Product_Id= F_Product_Id
+            };
+            return Content(data.ToJson());
+        }
+        /// <summary>
         /// 导出操作
         /// </summary>
         /// <param name="field"></param>
@@ -40,6 +59,18 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         {
             DataTable dataTable = ProductBLL.ExportExcel(field);
             return File(ExcelHelper.ExportToContent(dataTable, sheetTitle: "产品"), "application/ms-excel", "产品.xls");
+        }
+        /// <summary>
+        /// 导出操作
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AuthAction]
+        public FileContentResult ExportPartStockExcel(string field, string query, string F_Product_Id)
+        {
+            DataTable dataTable = new PartStockBLL().Export(field, query, F_Product_Id);
+            return File(ExcelHelper.ExportToContent(dataTable, sheetTitle: "零件实时库存"), "application/ms-excel", "零件实时库存.xls");
         }
         /// <summary>
         /// 根据F_Id获取数据
@@ -150,7 +181,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         }
 
         [HttpGet]
-        public ActionResult IndexProduct()
+        public ActionResult PartStockList()
         {
             return View();
         }

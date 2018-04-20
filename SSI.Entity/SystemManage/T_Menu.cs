@@ -55,7 +55,7 @@ namespace SSI.Entity.SystemManage
         public override T_Menu Create()
         {
             base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT S_MENU.NEXTVAL FROM DUAL");
+            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_MENU");
             return this;
         }
     }

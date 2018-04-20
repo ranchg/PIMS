@@ -1,18 +1,20 @@
 ﻿using SSI.Entity.PartManage;
-using SSI.Entity.SystemManage;
 using SSI.Repository;
 using SSI.Utilities;
-using System.Collections.Generic;
 using System.Data;
 
 namespace SSI.Business.PartManage
 {
     public class PartStockBLL : RepositoryFactory<T_Part>
     {
-        public DataTable GetGridList(GridParam gp)
+        public DataTable GetGridList(GridParam gp, string productId = null)
         {
-            string select = "SELECT * FROM", where = "WHERE 1=1";
-            string from =
+            string select = "SELECT * FROM", where = "WHERE 1=1", product = "";
+            if (!string.IsNullOrEmpty(productId))
+            {
+                product = string.Format(" HAVING T2.F_PRODUCT_ID={0}", productId);
+            }
+            string from = string.Format(
             @"SELECT T1.F_ID,
                    T1.F_NAME F_PART_NAME,
                    T1.F_CODE F_PART_CODE,
@@ -26,7 +28,7 @@ namespace SSI.Business.PartManage
                    NVL(T2.F_QUANTITY, 0) - NVL(T3.F_QUANTITY, 0) +
                    NVL(T4.F_QUANTITY, 0) F_AVAILABLE_QUANTITY
               FROM (SELECT T.F_ID, T.F_NAME, T.F_CODE, T.F_SPEC, T.F_UNIT
-                      FROM T_PART T
+                      FROM V_PART T
                      WHERE T.F_DELETE_MARK = 0) T1
               LEFT JOIN (SELECT T2.F_PART_ID, T2.F_TIME_ID, T2.F_QUANTITY, T1.F_TIME
                            FROM (SELECT T.F_ID, T.F_TIME
@@ -55,7 +57,7 @@ namespace SSI.Business.PartManage
                                                FROM T_PRODUCT_MAKE T
                                               WHERE T.F_DELETE_MARK = 0) T2
                                      ON T2.F_MAKE_DATE >= T1.F_TIME
-                                  GROUP BY T2.F_PRODUCT_ID) T1
+                                  GROUP BY T2.F_PRODUCT_ID {0}) T1
                            LEFT JOIN (SELECT T1.F_PRODUCT_ID, T1.F_VERSION, T2.F_ID
                                        FROM (SELECT T.F_PRODUCT_ID,
                                                     MAX(T.F_VERSION) F_VERSION
@@ -98,19 +100,23 @@ namespace SSI.Business.PartManage
                            FROM T_PART_BUY T
                           WHERE T.F_DELETE_MARK = 0
                           GROUP BY T.F_PART_ID) T5
-                ON T5.F_PART_ID = T1.F_ID";
+                ON T5.F_PART_ID = T1.F_ID", product);
             if (!string.IsNullOrEmpty(gp.query))
             {
                 where += ConditionBuilder.GetWhereSql2(gp.query.JsonToList<Condition>());
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindTablePageBySql(sql, ref gp);
         }
 
-        public DataTable Export(string field, string query)
+        public DataTable Export(string field, string query, string productId = null)
         {
-            string select = "SELECT * FROM", where = "WHERE 1=1";
-            string from =
+            string select = "SELECT * FROM", where = "WHERE 1=1", product = "";
+            if (!string.IsNullOrEmpty(productId))
+            {
+                product = string.Format(" HAVING T2.F_PRODUCT_ID={0}", productId);
+            }
+            string from = string.Format(
             @"SELECT T1.F_ID,
                    T1.F_NAME F_PART_NAME,
                    T1.F_CODE F_PART_CODE,
@@ -153,7 +159,7 @@ namespace SSI.Business.PartManage
                                                FROM T_PRODUCT_MAKE T
                                               WHERE T.F_DELETE_MARK = 0) T2
                                      ON T2.F_MAKE_DATE >= T1.F_TIME
-                                  GROUP BY T2.F_PRODUCT_ID) T1
+                                  GROUP BY T2.F_PRODUCT_ID {0}) T1
                            LEFT JOIN (SELECT T1.F_PRODUCT_ID, T1.F_VERSION, T2.F_ID
                                        FROM (SELECT T.F_PRODUCT_ID,
                                                     MAX(T.F_VERSION) F_VERSION
@@ -196,7 +202,7 @@ namespace SSI.Business.PartManage
                            FROM T_PART_BUY T
                           WHERE T.F_DELETE_MARK = 0
                           GROUP BY T.F_PART_ID) T5
-                ON T5.F_PART_ID = T1.F_ID";
+                ON T5.F_PART_ID = T1.F_ID", product);
             if (!string.IsNullOrEmpty(field))
             {
                 select = ConditionBuilder.GetSelectSql(field.JsonToList<Column>());
@@ -205,7 +211,7 @@ namespace SSI.Business.PartManage
             {
                 where += ConditionBuilder.GetWhereSql2(query.JsonToList<Condition>());
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindTableBySql(sql);
         }
     }

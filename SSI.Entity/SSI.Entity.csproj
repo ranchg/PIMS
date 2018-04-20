@@ -75,7 +75,6 @@
     <Compile Include="SystemManage\T_User_Role.cs" />
     <Compile Include="SystemManage\T_User_Log.cs" />
     <Compile Include="SystemManage\T_User.cs" />
-    <Compile Include="SystemManage\VehicleDis.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -102,7 +102,7 @@ namespace SSI.Entity.SystemManage
             if (DataFactory.Database().FindCount<T_User>(whereSql) == 0)
             {
                 base.Create();
-                F_Id = DataFactory.Database().FindCountBySql("SELECT S_USER.NEXTVAL FROM DUAL");
+                F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_USER");
                 F_Password = Md5Helper.MD5("123456", 0x20).ToUpper();
                 return this;
             }

@@ -14,13 +14,12 @@ namespace SSI.Business.PartManage
             string select = "SELECT * FROM", where = "WHERE 1=1";
             string from =
             @"SELECT T1.*
-              FROM T_PART T1
-             WHERE T1.F_DELETE_MARK = 0";
+              FROM V_PART T1";
             if (!string.IsNullOrEmpty(gp.search))
             {
                 where += string.Format(" AND (F_NAME LIKE '%{0}%' OR F_CODE LIKE '%{0}%' OR F_SPEC LIKE '%{0}%')", gp.search);
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindListPageBySql(sql, ref gp);
         }
 
@@ -28,7 +27,7 @@ namespace SSI.Business.PartManage
         {
             string sql =
             @"SELECT T1.*
-              FROM T_PART T1
+              FROM V_PART T1
              WHERE T1.F_DELETE_MARK = 0
              ORDER BY T1.F_CREATE_TIME DESC";
             return Repository().FindListBySql(sql);
@@ -39,8 +38,7 @@ namespace SSI.Business.PartManage
             string select = "SELECT * FROM", where = "WHERE 1=1";
             string from =
             @"SELECT T1.*
-              FROM T_PART T1
-             WHERE T1.F_DELETE_MARK = 0";
+              FROM V_PART T1";
             if (!string.IsNullOrEmpty(field))
             {
                 select = ConditionBuilder.GetSelectSql(field.JsonToList<Column>());
@@ -49,7 +47,7 @@ namespace SSI.Business.PartManage
             {
                 where += string.Format(" AND (F_NAME LIKE '%{0}%' OR F_CODE LIKE '%{0}%' OR F_SPEC LIKE '%{0}%')", search);
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
             return Repository().FindTableBySql(sql);
         }
 

@@ -59,7 +59,7 @@ namespace SSI.Entity.SystemManage
         public override T_User_Log Create()
         {
             base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT S_USER_LOG.NEXTVAL FROM DUAL");
+            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_USER_LOG");
             return this;
         }
     }
