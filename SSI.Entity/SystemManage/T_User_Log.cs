@@ -14,11 +14,11 @@ namespace SSI.Entity.SystemManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("用户ID")]
         //用户ID
-        public int F_User_Id { get; set; }
+        public string F_User_Id { get; set; }
 
         [PropertyCN("账号")]
         //账号
@@ -55,12 +55,5 @@ namespace SSI.Entity.SystemManage
         [PropertyCN("创建时间")]
         //创建时间
         public DateTime? F_Create_Time { get; set; }
-
-        public override T_User_Log Create()
-        {
-            base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_USER_LOG");
-            return this;
-        }
     }
 }

@@ -7,7 +7,7 @@ using System.Data;
 
 namespace SSI.Business.PartManage
 {
-    public class PartBLL : RepositoryFactory<T_Part>
+    public class PartBLL
     {
         public List<T_Part> GetGridList(GridParam gp)
         {
@@ -20,7 +20,7 @@ namespace SSI.Business.PartManage
                 where += string.Format(" AND (F_NAME LIKE '%{0}%' OR F_CODE LIKE '%{0}%' OR F_SPEC LIKE '%{0}%')", gp.search);
             }
             string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
-            return Repository().FindListPageBySql(sql, ref gp);
+            return new Repository<T_Part>().FindListPageBySql(sql, ref gp);
         }
 
         public List<T_Part> GetList()
@@ -28,9 +28,17 @@ namespace SSI.Business.PartManage
             string sql =
             @"SELECT T1.*
               FROM V_PART T1
-             WHERE T1.F_DELETE_MARK = 0
              ORDER BY T1.F_CREATE_TIME DESC";
-            return Repository().FindListBySql(sql);
+            return new Repository<T_Part>().FindListBySql(sql);
+        }
+
+        public T_Part GetForm(string F_Code)
+        {
+            string sql = string.Format(
+            @"SELECT T1.*
+              FROM V_PART T1
+             WHERE T1.F_CODE = '{0}'", F_Code);
+            return new Repository<T_Part>().FindEntityBySql(sql);
         }
 
         public DataTable Export(string field, string search)
@@ -48,13 +56,7 @@ namespace SSI.Business.PartManage
                 where += string.Format(" AND (F_NAME LIKE '%{0}%' OR F_CODE LIKE '%{0}%' OR F_SPEC LIKE '%{0}%')", search);
             }
             string sql = string.Format("{0} ({1}) TT {2}", select, from, where);
-            return Repository().FindTableBySql(sql);
-        }
-
-        public DataTable GetPart()
-        {
-            string querySql = "SELECT T1.F_ID,T1.F_CODE || '00000000' AS F_CODE  FROM T_PART T1 WHERE T1.F_DELETE_MARK = 0";
-            return Repository().FindTableBySql(querySql);
+            return new Repository<T_Part>().FindTableBySql(sql);
         }
     }
 }

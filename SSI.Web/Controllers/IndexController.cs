@@ -35,7 +35,7 @@ namespace SSI.Web.Controllers
             var data = new
             {
                 user = ManageProvider.Provider.Current(),
-                menu = GetMenu(ManageProvider.Provider.Current().Menus, 1)
+                menu = GetMenu(ManageProvider.Provider.Current().Menus, "1")
             };
             return Content(data.ToJson());
         }
@@ -98,7 +98,7 @@ namespace SSI.Web.Controllers
             Session.Clear();
             return Content(new JsonMessage { state = "success", msg = "退出成功", data = new { url = "/Login/Index" } }.ToJson());
         }
-        private object GetMenu(List<T_Menu> menus, int parentId)
+        private object GetMenu(List<T_Menu> menus, string parentId)
         {
             return menus.Where(e => e.F_Parent_Id == parentId).Select(e => new { id = e.F_Id, text = e.F_Name, icon = e.F_Icon, url = e.F_Target, children = GetMenu(menus, e.F_Id) });
         }

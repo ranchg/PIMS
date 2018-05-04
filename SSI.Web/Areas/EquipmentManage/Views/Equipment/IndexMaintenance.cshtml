@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "设备维护管理";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date_time" name="F_Oper_Time" id="F_Oper_Time_Start" placeholder="操作时间开始" operate="AfterDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form_date_time" name="F_Oper_Time" id="F_Oper_Time_End" placeholder="操作时间结束" operate="BeforeDay" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="项目" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <div class="text-right">
+                        <button type="button" class="btn btn-default" id="btnClose">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Equipment_Id = $.request("F_Equipment_Id");
+            if (!!F_Equipment_Id) {
+                $("#table1").bootstrapTableInit({
+                    url: "/EquipmentManage/Maintenance/GetGridList?F_Equipment_Id=" + F_Equipment_Id,
+                    search: false,
+                    columns: [
+                        { checkbox: true },
+                        { field: "F_EQUIPMENT_CODE", title: "所属设备", sortable: true },
+                        { field: "F_NAME", title: "项目", sortable: true },
+                        { field: "F_COST", title: "费用", sortable: true },
+                        { field: "F_OPER_BY", title: "操作人", sortable: true },
+                        { field: "F_OPER_TIME", title: "操作时间", sortable: true }
+                    ]
+                });
+            } else {
+                $.modalClose();
+                $.modalAlert("参数错误");
+            }
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnClose").on("click",function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

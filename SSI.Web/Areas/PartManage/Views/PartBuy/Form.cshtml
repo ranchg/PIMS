@@ -8,21 +8,20 @@
             <form class="form-horizontal" id="form1">
                 <fieldset>
                     <div class="form-group">
-                        <label for="F_Part_Code" class="col-sm-3 control-label">零件号</label>
+                        <label for="F_Part_Code" class="col-sm-3 control-label">零件编码</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="F_Part_Code" placeholder="零件号" readonly />
+                                <input type="text" class="form-control" name="F_Part_Code" id="F_Part_Code" placeholder="零件编码" readonly />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-sm btn-default" id="btnPartSelect">选择</button>
                                 </span>
                             </div>
-                            <input type="hidden" name="F_Part_Id" id="F_Part_Id" required />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="F_Quantity" class="col-sm-3 control-label">数量</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="F_Quantity" id="F_Quantity" placeholder="数量" value="0" maxlength="50" required range=[0,99999] />
+                            <input type="text" class="form-control" name="F_Quantity" id="F_Quantity" placeholder="数量" value="1" maxlength="50" required range=[1,99999] />
                         </div>
                     </div>
                     <div class="form-group">
@@ -64,13 +63,13 @@
                     async: false,
                     success: function (result) {
                         $("#form1").formSerialize(result);
-                        $.getJson({
-                            url: "/PartManage/Part/GetForm?F_Id=" + $("#F_Part_Id").val(),
-                            async: false,
-                            success: function (result) {
-                                $("#F_Part_Code").val(result.F_Code);
-                            }
-                        });
+                        //$.getJson({
+                        //    url: "/PartManage/Part/GetForm?F_Id=" + $("#F_Part_Id").val(),
+                        //    async: false,
+                        //    success: function (result) {
+                        //        $("#F_Part_Code").val(result.F_Code);
+                        //    }
+                        //});
                         $("#F_Eta").val((!!$("#F_Eta").val()) ? $.dataFormat(new Date($("#F_Eta").val()), "yyyy-MM-dd") : $("#F_Eta").val());
                         $("#F_Ata").val((!!$("#F_Ata").val()) ? $.dataFormat(new Date($("#F_Ata").val()), "yyyy-MM-dd") : $("#F_Ata").val());
                     }

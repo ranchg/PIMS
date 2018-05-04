@@ -14,7 +14,7 @@ namespace SSI.Entity.SystemManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("账号")]
         //账号
@@ -22,7 +22,7 @@ namespace SSI.Entity.SystemManage
 
         [PropertyCN("密码")]
         //密码
-        public string F_Password { get; set; }
+        public string F_Password { get; set; } = Md5Helper.MD5("123456", 0x20).ToUpper();
 
         [PropertyCN("姓名")]
         //姓名
@@ -102,8 +102,6 @@ namespace SSI.Entity.SystemManage
             if (DataFactory.Database().FindCount<T_User>(whereSql) == 0)
             {
                 base.Create();
-                F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_USER");
-                F_Password = Md5Helper.MD5("123456", 0x20).ToUpper();
                 return this;
             }
             else

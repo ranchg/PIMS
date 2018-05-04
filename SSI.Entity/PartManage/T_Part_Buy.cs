@@ -14,11 +14,11 @@ namespace SSI.Entity.PartManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
-        [PropertyCN("零件ID")]
-        //零件ID
-        public int F_Part_Id { get; set; }
+        [PropertyCN("零件编码")]
+        //零件编码
+        public string F_Part_Code { get; set; }
 
         [PropertyCN("数量")]
         //数量
@@ -51,12 +51,5 @@ namespace SSI.Entity.PartManage
         [PropertyCN("创建时间")]
         //创建时间
         public DateTime? F_Create_Time { get; set; }
-
-        public override T_Part_Buy Create()
-        {
-            base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT S_PART_BUY.NEXTVAL FROM DUAL");
-            return this;
-        }
     }
 }

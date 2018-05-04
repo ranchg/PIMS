@@ -53,7 +53,7 @@ namespace SSI.Business.SystemManage
         public T_User CheckLogin(string account, string password)
         {
             T_User t_User = GetEntityByAccount(account);
-            if (t_User != null && t_User.F_Id != 0)
+            if (t_User != null)
             {
                 if (t_User.F_Enable_Mark == 1)
                 {
@@ -69,7 +69,7 @@ namespace SSI.Business.SystemManage
                 else
                 {
                     throw new Exception("帐号被禁用");
-                }
+                } 
             }
             else
             {
@@ -83,8 +83,6 @@ namespace SSI.Business.SystemManage
             manageUser.User = GetForm(t_User.F_Id);
             if (t_User.F_System_Mark == 1)
             {
-                manageUser.Orgs = new OrgBLL().GetTreeListByUserId(0);
-                manageUser.Roles = new RoleBLL().GetListByUserId(0);
                 manageUser.Menus = new MenuBLL().GetList();
                 manageUser.Actions = new ActionBLL().GetList();
             }

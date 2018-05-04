@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "设备信息管理";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Code" id="F_Code" placeholder="设备编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Asset_Code" id="F_Asset_Code" placeholder="资产编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Spec" id="F_Spec" placeholder="规格型号" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <div class="text-right">
+                        <button type="button" class="btn btn-info" id="btnOK">确定</button>
+                        <button type="button" class="btn btn-default" id="btnClose">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/EquipmentManage/Equipment/GetGridList",
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_CODE", title: "设备编码", sortable: true },
+                    { field: "F_NAME", title: "名称", sortable: true },
+                    { field: "F_ASSET_CODE", title: "资产编码", sortable: true },
+                    { field: "F_SPEC", title: "规格型号", sortable: true },
+                    { field: "F_PERIOD", title: "维护周期", sortable: true },
+                    { field: "F_CREATE_TIME", title: "创建时间", sortable: true },
+                    { field: "F_PREV_OPER_TIME", title: "上次维护时间", sortable: true },
+                    {
+                        field: "F_NEXT_OPER_TIME", title: "下次维护时间", sortable: true,
+                        formatter: function (value, row) {
+                            if (new Date(value) <= new Date()) {
+                                return '<strong class="text-danger">' + value + '</strong> ';
+                            } else {
+                                return value;
+                            }
+                        }
+                    }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnOK").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.parentLayerWindow().find("#F_Equipment_Code").val(row.F_CODE);
+                    $.parentLayerWindow().find("#F_Equipment_Id").val(row.F_ID);
+                    $.modalClose();
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnClose").on("click",function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

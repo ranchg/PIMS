@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "设备维护管理";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_Equipment_Code" class="col-sm-3 control-label">设备编码</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="F_Equipment_Code" placeholder="所属设备" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-default" id="btnEquipmentSelect">选择</button>
+                                </span>
+                            </div>
+                            <input type="hidden" name="F_Equipment_Id" id="F_Equipment_Id" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Name" class="col-sm-3 control-label">项目</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="项目" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Cost" class="col-sm-3 control-label">费用</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Cost" id="F_Cost" placeholder="费用" value="0.01" maxlength="50" required range=[0.01,99999] />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Oper_By" class="col-sm-3 control-label">操作人</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Oper_By" id="F_Oper_By" placeholder="操作人" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Oper_Time" class="col-sm-3 control-label">操作时间</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form_date_time" name="F_Oper_Time" id="F_Oper_Time" placeholder="操作时间" readonly date=true />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Code" class="col-sm-3 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <textarea rows="6" class="form-control" name="F_Remark" id="F_Remark" placeholder="备注" maxlength="500"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                        <input type="submit" class="btn btn-info" value="确定" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Id = $.request("F_Id"), Detial = $.request("Detial");
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/EquipmentManage/Maintenance/GetForm?F_Id=" + F_Id,
+                    async: false,
+                    success: function (result) {
+                        $("#form1").formSerialize(result);
+                        $.getJson({
+                            url: "/EquipmentManage/Equipment/GetForm?F_Id=" + $("#F_Equipment_Id").val(),
+                            async: false,
+                            success: function (result) {
+                                $("#F_Equipment_Code").val(result.F_Code);
+                            }
+                        });
+                        $("#F_Oper_Time").val((!!$("#F_Oper_Time").val()) ? $.dataFormat(new Date($("#F_Oper_Time").val()), "yyyy-MM-dd") : $("#F_Oper_Time").val());
+                    }
+                });
+            }
+            if (!!Detial) {
+                $("#form1").find('fieldset').attr('disabled', true);
+                $("#form1").find(':submit').remove();
+            }
+            $("#btnEquipmentSelect").on("click", function (e) {
+                $.modalOpen({
+                    title: "所属设备",
+                    area: ['60%', '80%'],
+                    content: "/EquipmentManage/Maintenance/IndexEquipment",
+                });
+            });
+            $("#form1").submitForm({
+                url: "/EquipmentManage/Maintenance/SubmitForm?F_Id=" + F_Id,
+                success: function (result) {
+                    $.currentWindow().find(':button[name="refresh"]').trigger("click");
+                    $.modalClose();
+                }
+            });
+            $("#btnClose").on("click", function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

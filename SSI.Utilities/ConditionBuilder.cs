@@ -217,10 +217,10 @@ namespace SSI.Utilities
                         querySql.AppendFormat(" and " + con.ParamName + " = '" + con.ParamValue + "' ");
                         break;
                     case ConditionOperate.AfterDay:
-                        querySql.AppendFormat(" and " + con.ParamName + " >= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ");
+                        querySql.AppendFormat(" and " + con.ParamName + " >= '" + con.ParamValue + "' ");
                         break;
                     case ConditionOperate.BeforeDay:
-                        querySql.AppendFormat(" and " + con.ParamName + " <= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ");
+                        querySql.AppendFormat(" and " + con.ParamName + " <= '" + con.ParamValue + "' ");
                         break;
                     default:
                         break;

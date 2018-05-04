@@ -73,7 +73,7 @@ namespace SSI.Business.ProductManage
         }
 
         //导出数据 By 阮创 2017/11/30
-        private DataTable GetPartInfo(int F_Product_Id, DateTime? F_Make_Date)
+        private DataTable GetPartInfo(string F_Product_Id, DateTime? F_Make_Date)
         {
             string sql = string.Format(@"select t1.F_ID,t2.F_NUM
 from T_PART_STOCK t1
@@ -91,7 +91,7 @@ where t2.F_BOM_ID=(SELECT DISTINCT FIRST_VALUE(F_ID) OVER(PARTITION BY F_PRODUCT
         /// 计算添加的产品生产信息所需的所有零件数量
         /// </summary>
         /// <param name="t_Product_Make"></param>
-        public void CountPart(int F_Id)
+        public void CountPart(string F_Id)
         {
             try
             {

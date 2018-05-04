@@ -20,7 +20,7 @@ namespace SSI.Business.ProductManage
             {
                 where += string.Format(" AND (F_NAME LIKE '%{0}%' OR F_CODE LIKE '%{0}%')", gp.search);
             }
-            string sql = string.Format("{0} ({1}) {2}", select, from, where);
+            string sql = string.Format("{0} ({1}) T {2}", select, from, where);
             return Repository().FindListPageBySql(sql, ref gp);
         }
 

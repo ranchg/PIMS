@@ -33,7 +33,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = userLogBLL.GetForm(F_Id);
             return Content(data.ToJson());

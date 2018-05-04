@@ -55,7 +55,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             T_Product_Make t_Product_Make = ProductMakeBLL.GetForm(F_Id);
             return Content(new
@@ -78,7 +78,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             ProductMakeBLL.DeleteForm(F_Id);
             return Success("操作成功");
@@ -87,7 +87,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult EnableForm(int F_Id)
+        public ActionResult EnableForm(string F_Id)
         {
             T_Product_Make t_Product_Make = ProductMakeBLL.GetForm(F_Id);
             t_Product_Make.F_Enable_Mark = 1;
@@ -98,7 +98,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DisableForm(int F_Id)
+        public ActionResult DisableForm(string F_Id)
         {
             T_Product_Make t_Product_Make = ProductMakeBLL.GetForm(F_Id);
             t_Product_Make.F_Enable_Mark = 0;
@@ -109,7 +109,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult CountPart(int F_Id)
+        public ActionResult CountPart(string F_Id)
         {
             ProductMakeBLL.CountPart(F_Id);
             return Success("操作成功");

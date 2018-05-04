@@ -37,10 +37,10 @@ namespace SSI.Business.BomManage
                                 whereBom += " and " + con.ParamName + " = '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.AfterDay:
-                                whereBom += " and " + con.ParamName + " >= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereBom += " and " + con.ParamName + " >= '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.BeforeDay:
-                                whereBom += " and " + con.ParamName + " <= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                               whereBom += " and " + con.ParamName + " <= '" + con.ParamValue + "' ";
                                 break;
                             default:
                                 break;
@@ -57,10 +57,10 @@ namespace SSI.Business.BomManage
                                 whereTotal += " and " + con.ParamName + " = '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.AfterDay:
-                                whereTotal += " and " + con.ParamName + " >= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereTotal += " and " + con.ParamName + " >= '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.BeforeDay:
-                                whereTotal += " and " + con.ParamName + " <= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereTotal += " and " + con.ParamName + " <= '" + con.ParamValue + "' ";
                                 break;
                             default:
                                 break;
@@ -71,7 +71,7 @@ namespace SSI.Business.BomManage
                 {
                     bom= string.Format(@"(SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY F_DATE DESC) RN,
                                                     T1.*
-                                                    FROM T_BOM T1 {0}) WHERE RN=1) ", whereBom);
+                                                    FROM T_BOM T1 {0}) TB WHERE RN=1) ", whereBom);
                 }
                 querySql=string.Format(@"SELECT * FROM (SELECT T1.F_ID,T1.F_NUM,
                                                     T2.F_NAME AS F_BOM_NAME,T2.F_CODE AS F_BOM_CODE,T2.F_VERSION AS F_BOM_VERSION,T2.F_DATE AS F_BOM_DATE,
@@ -79,9 +79,9 @@ namespace SSI.Business.BomManage
                                                     FROM T_BOM_DETAIL T1 
                                                     INNER JOIN {0} T2
                                                     ON T1.F_BOM_ID=T2.F_ID
-                                                    INNER JOIN T_PART T3
-                                                    ON T1.F_PART_ID=T3.F_ID
-                                                    WHERE T2.F_DELETE_MARK=0 AND T3.F_DELETE_MARK=0) {1}", bom, whereTotal);
+                                                    INNER JOIN V_PART T3
+                                                    ON T1.F_PART_CODE=T3.F_CODE
+                                                    WHERE T2.F_DELETE_MARK=0) T {1}", bom, whereTotal);
             }
             return Repository().FindTablePageBySql(querySql, ref gp);
         }
@@ -119,10 +119,10 @@ namespace SSI.Business.BomManage
                                 whereBom += " and " + con.ParamName + " = '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.AfterDay:
-                                whereBom += " and " + con.ParamName + " >= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereBom += " and " + con.ParamName + " >= '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.BeforeDay:
-                                whereBom += " and " + con.ParamName + " <= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereBom += " and " + con.ParamName + " <= '" + con.ParamValue + "' ";
                                 break;
                             default:
                                 break;
@@ -139,10 +139,10 @@ namespace SSI.Business.BomManage
                                 whereTotal += " and " + con.ParamName + " = '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.AfterDay:
-                                whereTotal += " and " + con.ParamName + " >= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereTotal += " and " + con.ParamName + " >= '" + con.ParamValue + "' ";
                                 break;
                             case ConditionOperate.BeforeDay:
-                                whereTotal += " and " + con.ParamName + " <= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                                whereTotal += " and " + con.ParamName + " <= '" + con.ParamValue + "') ";
                                 break;
                             default:
                                 break;
@@ -153,7 +153,7 @@ namespace SSI.Business.BomManage
                 {
                     bom = string.Format(@"(SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY F_DATE DESC) RN,
                                                     T1.*
-                                                    FROM T_BOM T1 {0}) WHERE RN=1) ", whereBom);
+                                                    FROM T_BOM T1 {0}) TB WHERE RN=1) ", whereBom);
                 }
                 querySql = string.Format(@"SELECT * FROM (SELECT T1.F_ID,T1.F_NUM,
                                                     T2.F_NAME AS F_BOM_NAME,T2.F_CODE AS F_BOM_CODE,T2.F_VERSION AS F_BOM_VERSION,T2.F_DATE AS F_BOM_DATE,
@@ -161,24 +161,24 @@ namespace SSI.Business.BomManage
                                                     FROM T_BOM_DETAIL T1 
                                                     INNER JOIN {0} T2
                                                     ON T1.F_BOM_ID=T2.F_ID
-                                                    INNER JOIN T_PART T3
-                                                    ON T1.F_PART_ID=T3.F_ID
-                                                    WHERE T2.F_DELETE_MARK=0 AND T3.F_DELETE_MARK=0) {1}", bom, whereTotal);
+                                                    INNER JOIN V_PART T3
+                                                    ON T1.F_PART_CODE=T3.F_CODE
+                                                    WHERE T2.F_DELETE_MARK=0) T {1}", bom, whereTotal);
             }
             string orderby = "ORDER BY F_PART_CODE DESC";
             //return Repository().FindTablePageBySql(querySql, ref gp);
-            string sql = string.Format("{0} ({1}) ", select, querySql);
+            string sql = string.Format("{0} ({1}) TB", select, querySql);
             return Repository().FindTableBySql(sql);
         }
 
 
-        public DataTable getForm(int F_Id)
+        public DataTable getForm(string F_Id)
         {
             string querySql = string.Format(@"SELECT T1.F_ID,T1.F_NUM AS F_Part_Num,T2.F_NAME AS F_Bom_Name,T3.F_NAME AS F_Part_Name from T_BOM_DETAIL T1 
                                 INNER JOIN T_BOM T2 ON
                                 T1.F_BOM_ID=T2.F_ID
-                                INNER JOIN T_PART T3 ON
-                                T1.F_PART_ID=T3.F_ID WHERE T1.F_ID={0}", F_Id);
+                                INNER JOIN V_PART T3 ON
+                                T1.F_PART_CODE=T3.F_CODE WHERE T1.F_ID={0}", F_Id);
             return Repository().FindTableBySql(querySql);
         }
 
@@ -188,7 +188,7 @@ namespace SSI.Business.BomManage
             return Repository().ExecuteBySql(execSql);
         }
 
-        public DataTable GetDetailById(int f_id, GridParam gp)
+        public DataTable GetDetailById(string f_id, GridParam gp)
         {
             string bom = string.Format(@"(SELECT * FROM T_BOM T1 WHERE T1.F_ID={0})", f_id);
             string where = "WHERE 1=1";
@@ -207,10 +207,10 @@ namespace SSI.Business.BomManage
                             where += " and " + con.ParamName + " = '" + con.ParamValue + "' ";
                             break;
                         case ConditionOperate.AfterDay:
-                            where += " and " + con.ParamName + " >= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                            where += " and " + con.ParamName + " >= '" + con.ParamValue + "' ";
                             break;
                         case ConditionOperate.BeforeDay:
-                            where += " and " + con.ParamName + " <= to_date('" + con.ParamValue + "','yyyy-mm-dd hh24:mi:ss') ";
+                            where += " and " + con.ParamName + " <= '" + con.ParamValue + "' ";
                             break;
                         default:
                             break;
@@ -222,16 +222,16 @@ namespace SSI.Business.BomManage
                                                     FROM T_BOM_DETAIL T1 
                                                     INNER JOIN {0} T2
                                                     ON T1.F_BOM_ID=T2.F_ID
-                                                    INNER JOIN T_PART T3
-                                                    ON T1.F_PART_ID=T3.F_ID
-                                                    WHERE T1.F_ENABLE_MARK=1 AND T2.F_DELETE_MARK=0 AND T3.F_DELETE_MARK=0) {1}", bom, where);
+                                                    INNER JOIN V_PART T3
+                                                    ON T1.F_PART_CODE=T3.F_CODE
+                                                    WHERE T1.F_ENABLE_MARK=1 AND T2.F_DELETE_MARK=0) T {1}", bom, where);
             }
             return Repository().FindTablePageBySql(querySql, ref gp);
         }
 
-        public int Modify(int f_id, DbTransaction isOpenTrans)
+        public int Modify(string f_id, DbTransaction isOpenTrans)
         {
-            StringBuilder execSql = new StringBuilder(string.Format("UPDATE T_BOM_DETAIL SET F_ENABLE_MARK=0 WHERE F_BOM_ID={0}", f_id));
+            StringBuilder execSql = new StringBuilder(string.Format("UPDATE T_BOM_DETAIL SET F_ENABLE_MARK=0 WHERE F_BOM_ID='{0}'", f_id));
             return Repository().ExecuteBySql(execSql);
         }
         

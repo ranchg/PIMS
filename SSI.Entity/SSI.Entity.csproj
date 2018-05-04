@@ -56,14 +56,14 @@
     <Compile Include="Action\IModifyAction.cs" />
     <Compile Include="BomManage\T_Bom.cs" />
     <Compile Include="BomManage\T_Bom_Detail.cs" />
+    <Compile Include="EquipmentManage\T_Maintenance.cs" />
+    <Compile Include="EquipmentManage\T_Equipment.cs" />
     <Compile Include="ProductManage\T_Product_Make.cs" />
     <Compile Include="ProductManage\T_Product.cs" />
     <Compile Include="Base\BaseEntity.cs" />
     <Compile Include="Manage\IManageProvider.cs" />
     <Compile Include="Manage\ManageProvider.cs" />
     <Compile Include="Manage\ManageUser.cs" />
-    <Compile Include="PartManage\T_Part_Check_Time.cs" />
-    <Compile Include="PartManage\T_Part_Check.cs" />
     <Compile Include="PartManage\T_Part_Buy.cs" />
     <Compile Include="PartManage\T_Part.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

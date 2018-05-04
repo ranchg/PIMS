@@ -26,14 +26,6 @@ namespace SSI.Web.Areas.PartManage.Controllers
             return Content(data.ToJson());
         }
 
-        [HttpGet]
-        [HttpAjax]
-        public ActionResult GetPartCheckTimeList()
-        {
-            var data = new PartCheckTimeBLL().GetList();
-            return Content(data.ToJson());
-        }
-
         [HttpPost]
         [AuthAction]
         public FileContentResult Export(string field, string query)

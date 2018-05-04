@@ -14,15 +14,15 @@ namespace SSI.Entity.SystemManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("角色ID")]
         //账号
-        public int F_Role_Id { get; set; }
+        public string F_Role_Id { get; set; }
 
         [PropertyCN("操作ID")]
         //密码
-        public int F_Action_Id { get; set; }
+        public string F_Action_Id { get; set; }
 
         [PropertyCN("有效标志")]
         //有效标志(1有效,0无效)
@@ -39,12 +39,5 @@ namespace SSI.Entity.SystemManage
         [PropertyCN("创建时间")]
         //创建时间
         public DateTime? F_Create_Time { get; set; }
-
-        public override T_Role_Action Create()
-        {
-            base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_ROLE_ACTION");
-            return this;
-        }
     }
 }

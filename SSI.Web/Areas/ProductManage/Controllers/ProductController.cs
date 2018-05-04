@@ -35,19 +35,19 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         /// </summary>
         /// <param name="gp"></param>
         /// <returns></returns>
-        [HttpGet]
-        [HttpAjax]
-        [AuthAction]
-        public ActionResult GetGridPartSotckList(GridParam gp,string F_Product_Id)
-        {
-            var data = new
-            {
-                rows = new PartStockBLL().GetGridList(gp, F_Product_Id),
-                total = gp.total,
-                F_Product_Id= F_Product_Id
-            };
-            return Content(data.ToJson());
-        }
+        //[HttpGet]
+        //[HttpAjax]
+        //[AuthAction]
+        //public ActionResult GetGridPartSotckList(GridParam gp,string F_Product_Id)
+        //{
+        //    var data = new
+        //    {
+        //        rows = new PartStockBLL().GetGridList(gp, F_Product_Id),
+        //        total = gp.total,
+        //        F_Product_Id= F_Product_Id
+        //    };
+        //    return Content(data.ToJson());
+        //}
         /// <summary>
         /// 导出操作
         /// </summary>
@@ -65,13 +65,13 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         /// </summary>
         /// <param name="field"></param>
         /// <returns></returns>
-        [HttpPost]
-        [AuthAction]
-        public FileContentResult ExportPartStockExcel(string field, string query, string F_Product_Id)
-        {
-            DataTable dataTable = new PartStockBLL().Export(field, query, F_Product_Id);
-            return File(ExcelHelper.ExportToContent(dataTable, sheetTitle: "零件实时库存"), "application/ms-excel", "零件实时库存.xls");
-        }
+        //[HttpPost]
+        //[AuthAction]
+        //public FileContentResult ExportPartStockExcel(string field, string query, string F_Product_Id)
+        //{
+        //    DataTable dataTable = new PartStockBLL().Export(field, query, F_Product_Id);
+        //    return File(ExcelHelper.ExportToContent(dataTable, sheetTitle: "零件实时库存"), "application/ms-excel", "零件实时库存.xls");
+        //}
         /// <summary>
         /// 根据F_Id获取数据
         /// </summary>
@@ -79,7 +79,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = ProductBLL.GetForm(F_Id);
             return Content(data.ToJson());
@@ -104,7 +104,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             ProductBLL.DeleteForm(F_Id);
             return Success("操作成功");
@@ -118,7 +118,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult EnableForm(int F_Id)
+        public ActionResult EnableForm(string F_Id)
         {
             T_Product t_Product = ProductBLL.GetForm(F_Id);
             t_Product.F_Enable_Mark = 1;
@@ -134,7 +134,7 @@ namespace SSI.Web.Areas.ProductManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DisableForm(int F_Id)
+        public ActionResult DisableForm(string F_Id)
         {
             T_Product t_Product = ProductBLL.GetForm(F_Id);
             t_Product.F_Enable_Mark = 0;

@@ -10,6 +10,7 @@ namespace SSI.Entity.Base
         public virtual TEntity Create()
         {
             var entity = this as ICreateAction;
+            entity.F_Id = Guid.NewGuid().ToString();
             if (ManageProvider.Provider.Current() != null)
             {
                 entity.F_Create_By = ManageProvider.Provider.Current().User.F_Account;

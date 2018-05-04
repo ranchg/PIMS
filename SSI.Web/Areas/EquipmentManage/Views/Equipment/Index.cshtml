@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "设备信息管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form class="form-inline" id="table1_query">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Code" id="F_Code" placeholder="设备编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="名称" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Asset_Code" id="F_Asset_Code" placeholder="资产编码" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="F_Spec" id="F_Spec" placeholder="规格型号" operate="Like" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" id="btnQuery">查询</button>
+                            <button type="button" class="btn btn-default" id="btnReset">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <div id="table1_toolbar">
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnMaintenance">维护记录</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDetail">查看</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnAdd">添加</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnEdit">修改</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnDelete">删除</button>
+                        <button type="button" class="btn btn-default" authorize="Button" id="btnExport">导出</button>
+                    </div>
+                    <table authorize="Grid" id="table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            $("#table1").bootstrapTableInit({
+                url: "/EquipmentManage/Equipment/GetGridList",
+                search: false,
+                columns: [
+                    { checkbox: true },
+                    { field: "F_CODE", title: "设备编码", sortable: true },
+                    { field: "F_NAME", title: "名称", sortable: true },
+                    { field: "F_ASSET_CODE", title: "资产编码", sortable: true },
+                    { field: "F_SPEC", title: "规格型号", sortable: true },
+                    { field: "F_PERIOD", title: "维护周期", sortable: true },
+                    { field: "F_CREATE_TIME", title: "创建时间", sortable: true },
+                    { field: "F_PREV_OPER_TIME", title: "上次维护时间", sortable: true },
+                    {
+                        field: "F_NEXT_OPER_TIME", title: "下次维护时间", sortable: true,
+                        formatter: function (value, row) {
+                            if (new Date(value) <= new Date()) {
+                                return '<strong class="text-danger">' + value + '</strong> ';
+                            } else {
+                                return value;
+                            }
+                        }
+                    }
+                ]
+            });
+            $("#btnQuery").on("click", function (e) {
+                $("#table1").bootstrapTable('refresh');
+            });
+            $("#btnReset").on("click", function (e) {
+                $("#table1_query")[0].reset();
+                $("#btnQuery").trigger("click");
+            });
+            $("#btnMaintenance").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "维护记录",
+                        area: ['60%', '80%'],
+                        content: "/EquipmentManage/Equipment/IndexMaintenance?F_Equipment_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDetail").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "查看",
+                        content: "/EquipmentManage/Equipment/Form?Detial=true&F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnAdd").on("click", function (e) {
+                $.modalOpen({
+                    title: "添加",
+                    content: "/EquipmentManage/Equipment/Form"
+                });
+            });
+            $("#btnEdit").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.modalOpen({
+                        title: "修改",
+                        content: "/EquipmentManage/Equipment/Form?F_Id=" + row.F_ID
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnDelete").on("click", function (e) {
+                var row = $("#table1").bootstrapTable('getSelections')[0];
+                if (row) {
+                    $.confirmAjax({
+                        url: "/EquipmentManage/Equipment/DeleteForm?F_Id=" + row.F_ID,
+                        success: function (result) {
+                            $("#table1").bootstrapTable('refresh');
+                        }
+                    });
+                } else {
+                    $.modalAlert("请选中一行数据");
+                }
+            });
+            $("#btnExport").on("click", function (e) {
+                var field = $("#table1").serializeField();
+                var query = $("#table1_query").serializeQuery();
+                $.download("/EquipmentManage/Equipment/Export?field=" + field + "&query=" + query);
+            });
+        });
+    </script>
+}

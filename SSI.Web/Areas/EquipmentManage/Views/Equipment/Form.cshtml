@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "零件采购管理";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@section Content{
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="F_Code" class="col-sm-3 control-label">设备编码</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Code" id="F_Code" placeholder="设备编码" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Name" class="col-sm-3 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Name" id="F_Name" placeholder="名称" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Asset_Code" class="col-sm-3 control-label">资产编码</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Asset_Code" id="F_Asset_Code" placeholder="资产编码" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Spec" class="col-sm-3 control-label">规格型号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Spec" id="F_Spec" placeholder="规格型号" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Org" class="col-sm-3 control-label">部门</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Org" id="F_Org" placeholder="部门" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Vender" class="col-sm-3 control-label">厂家</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Vender" id="F_Vender" placeholder="厂家" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Place" class="col-sm-3 control-label">位置</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Place" id="F_Place" placeholder="位置" maxlength="50" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="F_Period" class="col-sm-3 control-label">周期</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="F_Period" id="F_Period" placeholder="周期" value="1" maxlength="50" required range=[1,99999] />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                        <input type="submit" class="btn btn-info" value="确定" />
+                        <input type="button" class="btn btn-default" value="关闭" id="btnClose" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section ScriptPage{
+    <script>
+        $(function () {
+            var F_Id = $.request("F_Id"), Detial = $.request("Detial");
+            if (!!F_Id) {
+                $.getJson({
+                    url: "/EquipmentManage/Equipment/GetForm?F_Id=" + F_Id,
+                    async: false,
+                    success: function (result) {
+                        $("#form1").formSerialize(result);
+                    }
+                });
+            }
+            if (!!Detial) {
+                $("#form1").find('fieldset').attr('disabled', true);
+                $("#form1").find(':submit').remove();
+            }
+            $("#form1").submitForm({
+                url: "/EquipmentManage/Equipment/SubmitForm?F_Id=" + F_Id,
+                success: function (result) {
+                    $.currentWindow().find(':button[name="refresh"]').trigger("click");
+                    $.modalClose();
+                }
+            });
+            $("#btnClose").on("click",function (e) {
+                $.modalClose();
+            });
+        });
+    </script>
+}

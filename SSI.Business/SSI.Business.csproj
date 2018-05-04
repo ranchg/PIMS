@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EquipmentManage\EquipmentBLL.cs" />
+    <Compile Include="EquipmentManage\MaintenanceBLL.cs" />
     <Compile Include="PartManage\PartStockBLL.cs" />
-    <Compile Include="PartManage\PartCheckTimeBLL.cs" />
-    <Compile Include="PartManage\PartCheckBLL.cs" />
     <Compile Include="PartManage\PartBuyBLL.cs" />
     <Compile Include="PartManage\PartBLL.cs" />
     <Compile Include="BomManage\BomBLL.cs" />

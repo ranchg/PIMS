@@ -26,7 +26,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = roleBLL.GetForm(F_Id);
             return Content(data.ToJson());
@@ -42,7 +42,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             roleBLL.DeleteForm(F_Id);
             return Success("操作成功");
@@ -51,7 +51,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult EnableForm(int F_Id)
+        public ActionResult EnableForm(string F_Id)
         {
             T_Role t_Role = roleBLL.GetForm(F_Id);
             t_Role.F_Enable_Mark = 1;
@@ -62,7 +62,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DisableForm(int F_Id)
+        public ActionResult DisableForm(string F_Id)
         {
             T_Role t_Role = roleBLL.GetForm(F_Id);
             t_Role.F_Enable_Mark = 0;
@@ -79,22 +79,22 @@ namespace SSI.Web.Areas.SystemManage.Controllers
 
         [HttpPost]
         [HttpAjax]
-        public ActionResult SubmitAuthorize(int F_Id, string Actions)
+        public ActionResult SubmitAuthorize(string F_Id, string Actions)
         {
             new RoleActionBLL().DeleteByRoleId(F_Id);
-            new RoleActionBLL().InsertFormBatch(Actions.JsonToList<int>().Select(e => new T_Role_Action { F_Role_Id = F_Id, F_Action_Id = e, F_Enable_Mark = 1 }).ToList());
+            new RoleActionBLL().InsertFormBatch(Actions.JsonToList<string>().Select(e => new T_Role_Action { F_Role_Id = F_Id, F_Action_Id = e, F_Enable_Mark = 1 }).ToList());
             return Success("操作成功");
         }
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetAuthorize(int F_Id)
+        public ActionResult GetAuthorize(string F_Id)
         {
-            var data = GetAuthorizeTree(new MenuBLL().GetList(), new ActionBLL().GetList(), new ActionBLL().GetListByRoleId(F_Id), 1);
+            var data = GetAuthorizeTree(new MenuBLL().GetList(), new ActionBLL().GetList(), new ActionBLL().GetListByRoleId(F_Id), "1");
             return Content(data.ToJson());
         }
 
-        private object GetAuthorizeTree(List<T_Menu> menuList, List<T_Action> actionList, List<T_Action> roleList, int parentId)
+        private object GetAuthorizeTree(List<T_Menu> menuList, List<T_Action> actionList, List<T_Action> roleList, string parentId)
         {
             var listObj = new List<object>();
             actionList.FindAll(e => e.F_Menu_Id == parentId).ForEach(e =>
@@ -119,11 +119,11 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpAjax]
         public ActionResult GetOrg()
         {
-            var data = GetOrgTree(new OrgBLL().GetList(), 1);
+            var data = GetOrgTree(new OrgBLL().GetList(), "1");
             return Content(data.ToJson());
         }
 
-        private object GetOrgTree(List<T_Org> orgs, int parentId)
+        private object GetOrgTree(List<T_Org> orgs, string parentId)
         {
             return orgs.Where(e => e.F_Parent_Id == parentId).Select(e => new { id = e.F_Id, name = e.F_Name, open = true, children = GetOrgTree(orgs, e.F_Id) });
         }

@@ -14,11 +14,11 @@ namespace SSI.Entity.SystemManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("菜单ID")]
         //菜单ID
-        public int F_Menu_Id { get; set; }
+        public string F_Menu_Id { get; set; }
 
         [PropertyCN("编码")]
         //编码
@@ -51,12 +51,5 @@ namespace SSI.Entity.SystemManage
         [PropertyCN("创建时间")]
         //创建时间
         public DateTime? F_Create_Time { get; set; }
-
-        public override T_Action Create()
-        {
-            base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_ACTION");
-            return this;
-        }
     }
 }

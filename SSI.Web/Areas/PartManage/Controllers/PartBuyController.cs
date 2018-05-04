@@ -29,7 +29,7 @@ namespace SSI.Web.Areas.PartManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = partBuyBLL.GetForm(F_Id);
             return Content(data.ToJson());
@@ -52,7 +52,7 @@ namespace SSI.Web.Areas.PartManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             partBuyBLL.DeleteForm(F_Id);
             return Success("操作成功");

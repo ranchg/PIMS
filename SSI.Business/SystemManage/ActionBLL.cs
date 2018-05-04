@@ -37,7 +37,7 @@ namespace SSI.Business.SystemManage
         }
 
         //根据用户ID获取列表 By 阮创 2017/11/30
-        public List<T_Action> GetListByUserId(int userId)
+        public List<T_Action> GetListByUserId(string userId)
         {
             string sql = string.Format(
             @"SELECT T1.*
@@ -55,7 +55,7 @@ namespace SSI.Business.SystemManage
         }
 
         //根据角色ID获取列表 By 阮创 2017/11/30
-        public List<T_Action> GetListByRoleId(int roleId)
+        public List<T_Action> GetListByRoleId(string roleId)
         {
             string sql = string.Format(
             @"SELECT T1.*
@@ -70,7 +70,7 @@ namespace SSI.Business.SystemManage
         }
 
         //校验操作 By 阮创 2017/11/30
-        public bool Validate(int userId,string menu,string action)
+        public bool Validate(string userId,string menu,string action)
         {
             string sql = string.Format(
             @"SELECT COUNT(1)

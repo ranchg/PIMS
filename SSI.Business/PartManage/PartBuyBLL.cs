@@ -15,12 +15,11 @@ namespace SSI.Business.PartManage
             string from =
             @"SELECT T1.*,
                    T2.F_NAME F_PART_NAME,
-                   T2.F_CODE F_PART_CODE,
                    T2.F_SPEC F_PART_SPEC,
                    T2.F_UNIT F_PART_UNIT
               FROM T_PART_BUY T1
-              LEFT JOIN T_PART T2
-                ON T2.F_ID = T1.F_PART_ID
+              LEFT JOIN V_PART T2
+                ON T2.F_CODE = T1.F_PART_CODE
              WHERE T1.F_DELETE_MARK = 0";
             if (!string.IsNullOrEmpty(gp.query))
             {
@@ -36,12 +35,11 @@ namespace SSI.Business.PartManage
             string from =
             @"SELECT T1.*,
                    T2.F_NAME F_PART_NAME,
-                   T2.F_CODE F_PART_CODE,
                    T2.F_SPEC F_PART_SPEC,
                    T2.F_UNIT F_PART_UNIT
               FROM T_PART_BUY T1
-              LEFT JOIN T_PART T2
-                ON T2.F_ID = T1.F_PART_ID
+              LEFT JOIN V_PART T2
+                ON T2.F_CODE = T1.F_PART_CODE
              WHERE T1.F_DELETE_MARK = 0";
             if (!string.IsNullOrEmpty(field))
             {

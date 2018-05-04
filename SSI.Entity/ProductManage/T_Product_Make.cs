@@ -14,11 +14,11 @@ namespace SSI.Entity.ProductManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("产品ID")]
         //产品ID
-        public int F_Product_Id { get; set; }
+        public string F_Product_Id { get; set; }
 
         [PropertyCN("数量")]
         //数量
@@ -47,14 +47,5 @@ namespace SSI.Entity.ProductManage
         [PropertyCN("创建时间")]
         //创建时间
         public DateTime? F_Create_Time { get; set; }
-
-        public override T_Product_Make Create()
-        {
-            base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT S_PRODUCT_MAKE.NEXTVAL FROM DUAL");
-            F_Is_Read = 0;
-            F_Enable_Mark = 1;
-            return this;
-        }
     }
 }

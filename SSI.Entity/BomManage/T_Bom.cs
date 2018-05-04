@@ -17,20 +17,19 @@ namespace SSI.Entity.BomManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("产品ID")]
         //菜单ID
-        public int F_Product_Id { get; set; }
-
-        [PropertyCN("BOM名称")]
-        //编码
-        public string F_Name { get; set; }
-
+        public string F_Product_Id { get; set; }
 
         [PropertyCN("BOM编码")]
         //编码
         public string F_Code { get; set; }
+
+        [PropertyCN("BOM名称")]
+        //编码
+        public string F_Name { get; set; }
 
         [PropertyCN("产品版本")]
         //名称
@@ -42,7 +41,7 @@ namespace SSI.Entity.BomManage
 
         [PropertyCN("有效标志")]
         //有效标志(1有效,0无效)
-        public int F_Enable_Mark { get; set; } = 1;
+        public int F_Enable_Mark { get; set; }=1;
 
         [PropertyCN("删除标志")]
         //删除标志(1已删,0未删)
@@ -55,12 +54,5 @@ namespace SSI.Entity.BomManage
         [PropertyCN("创建时间")]
         //创建时间
         public DateTime? F_Create_Time { get; set; }
-
-        public override T_Bom Create()
-        {
-            base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT S_BOM.NEXTVAL FROM DUAL");
-            return this;
-        }
     }
 }

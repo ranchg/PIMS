@@ -45,10 +45,10 @@
 @section ScriptPage{
     <script>
         $(function () {
-            var F_Id = $.request("F_Id"), Detial = $.request("Detial");
-            if (!!F_Id) {
+            var F_Code = $.request("F_Code"), Detial = $.request("Detial");
+            if (!!F_Code) {
                 $.getJson({
-                    url: "/PartManage/Part/GetForm?F_Id=" + F_Id,
+                    url: "/PartManage/Part/GetForm?F_Code=" + F_Code,
                     async: false,
                     success: function (result) {
                         $("#form1").formSerialize(result);
@@ -59,13 +59,6 @@
                 $("#form1").find('fieldset').attr('disabled', true);
                 $("#form1").find(':submit').remove();
             }
-            $("#form1").submitForm({
-                url: "/PartManage/Part/SubmitForm?F_Id=" + F_Id,
-                success: function (result) {
-                    $.currentWindow().find(':button[name="refresh"]').trigger("click");
-                    $.modalClose();
-                }
-            });
             $("#btnClose").on("click",function (e) {
                 $.modalClose();
             });

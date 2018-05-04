@@ -44,7 +44,7 @@ namespace SSI.Web.Areas.BomManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = bomBLL.GetForm(F_Id);
             return Content(data.ToJson());
@@ -60,13 +60,13 @@ namespace SSI.Web.Areas.BomManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             bomBLL.DeleteForm(F_Id);
             return Success("操作成功");
         }
 
-        public ActionResult GetBomDetails(int F_Id)
+        public ActionResult GetBomDetails(string F_Id)
         {
             List<T_Bom_Detail> list = new Repository<T_Bom_Detail>().FindList(string.Format("AND F_BOM_ID={0}", F_Id));
             var returnJson = new
@@ -95,7 +95,7 @@ namespace SSI.Web.Areas.BomManage.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateData(int F_Id,HttpPostedFileBase file)
+        public ActionResult UpdateData(string F_Id,HttpPostedFileBase file)
         {
             if (bomBLL.UpdateData(F_Id, ExcelHelper.ImportToDataTable(file.InputStream)))
                 return Success("导入成功");

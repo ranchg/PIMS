@@ -45,7 +45,6 @@
                 var row = $("#table1").bootstrapTable('getSelections')[0];
                 if (row) {
                     $.parentLayerWindow().find("#F_Part_Code").val(row.F_Code);
-                    $.parentLayerWindow().find("#F_Part_Id").val(row.F_Id);
                     $.modalClose();
                 } else {
                     $.modalAlert("请选中一行数据");

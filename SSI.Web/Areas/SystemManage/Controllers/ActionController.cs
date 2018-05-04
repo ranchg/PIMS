@@ -26,7 +26,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = actionBLL.GetForm(F_Id);
             return Content(data.ToJson());
@@ -42,7 +42,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             actionBLL.DeleteForm(F_Id);
             return Success("操作成功");
@@ -51,7 +51,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult EnableForm(int F_Id)
+        public ActionResult EnableForm(string F_Id)
         {
             T_Action t_Action = actionBLL.GetForm(F_Id);
             t_Action.F_Enable_Mark = 1;
@@ -62,7 +62,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DisableForm(int F_Id)
+        public ActionResult DisableForm(string F_Id)
         {
             T_Action t_Action = actionBLL.GetForm(F_Id);
             t_Action.F_Enable_Mark = 0;
@@ -74,11 +74,11 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpAjax]
         public ActionResult GetMenu()
         {
-            var data = GetMenuTree(new MenuBLL().GetList(), 0);
+            var data = GetMenuTree(new MenuBLL().GetList(), "0");
             return Content(data.ToJson());
         }
 
-        private object GetMenuTree(List<T_Menu> menus, int parentId)
+        private object GetMenuTree(List<T_Menu> menus, string parentId)
         {
             return menus.Where(e => e.F_Parent_Id == parentId).Select(e => new { id = e.F_Id, name = e.F_Name, open = true, children = GetMenuTree(menus, e.F_Id) });
         }

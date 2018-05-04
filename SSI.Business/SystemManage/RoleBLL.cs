@@ -38,7 +38,7 @@ namespace SSI.Business.SystemManage
         }
 
         //根据用户ID获取列表 By 阮创 2017/11/30
-        public List<T_Role> GetListByUserId(int userId)
+        public List<T_Role> GetListByUserId(string userId)
         {
             string sql = string.Format(
             @"SELECT T1.*

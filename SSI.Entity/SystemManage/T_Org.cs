@@ -14,11 +14,11 @@ namespace SSI.Entity.SystemManage
     {
         [PropertyCN("主键ID")]
         //主键ID
-        public int F_Id { get; set; }
+        public string F_Id { get; set; }
 
         [PropertyCN("父级ID")]
         //父级ID
-        public int F_Parent_Id { get; set; }
+        public string F_Parent_Id { get; set; }
 
         [PropertyCN("名称")]
         //名称
@@ -59,7 +59,7 @@ namespace SSI.Entity.SystemManage
         public override T_Org Create()
         {
             base.Create();
-            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(F_ID), 0) + 1 FROM T_ORG");
+            F_Id = DataFactory.Database().FindCountBySql("SELECT ISNULL(MAX(CONVERT(INT,F_ID)), 0) + 1 FROM T_ORG").ToString();
             return this;
         }
     }

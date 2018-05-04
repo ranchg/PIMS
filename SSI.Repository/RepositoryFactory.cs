@@ -15,7 +15,7 @@ namespace SSI.Repository
         }
 
         //获取表单 By 阮创 2017/11/30
-        public virtual TEntity GetForm(int F_Id)
+        public virtual TEntity GetForm(string F_Id)
         {
             return Repository().FindEntity(F_Id);
         }
@@ -23,7 +23,7 @@ namespace SSI.Repository
         //提交表单 By 阮创 2017/11/30
         public virtual int SubmitForm(TEntity entity)
         {
-            if (entity.F_Id == 0)
+            if (string.IsNullOrEmpty(entity.F_Id))
             {
                 return Repository().Insert(entity.Create());
             }
@@ -36,7 +36,7 @@ namespace SSI.Repository
         //提交表单 By 阮创 2017/11/30
         public virtual int SubmitForm(TEntity entity, DbTransaction isOpenTrans)
         {
-            if (entity.F_Id == 0)
+            if (string.IsNullOrEmpty(entity.F_Id))
             {
                 return Repository().Insert(entity.Create(), isOpenTrans);
             }
@@ -47,13 +47,13 @@ namespace SSI.Repository
         }
 
         //删除表单 By 阮创 2017/11/30
-        public virtual int DeleteForm(int F_Id)
+        public virtual int DeleteForm(string F_Id)
         {
             return Repository().Update(GetForm(F_Id).Delete());
         }
 
         //删除表单 By 阮创 2017/11/30
-        public virtual int DeleteForm(int F_Id, DbTransaction isOpenTrans)
+        public virtual int DeleteForm(string F_Id, DbTransaction isOpenTrans)
         {
             return Repository().Update(GetForm(F_Id).Delete(), isOpenTrans);
         }
@@ -123,13 +123,13 @@ namespace SSI.Repository
         //删除表单批量 By 阮创 2017/11/30
         public virtual int DeleteFormBatch(string F_Id)
         {
-            return Repository().Update(F_Id.Split(',').Select(t => GetForm(int.Parse(t)).Delete()).ToList());
+            return Repository().Update(F_Id.Split(',').Select(e => GetForm(e).Delete()).ToList());
         }
 
         //删除表单批量 By 阮创 2017/11/30
         public virtual int DeleteFormBatch(string F_Id, DbTransaction isOpenTrans)
         {
-            return Repository().Update(F_Id.Split(',').Select(t => GetForm(int.Parse(t)).Delete()).ToList(), isOpenTrans);
+            return Repository().Update(F_Id.Split(',').Select(e => GetForm(e).Delete()).ToList(), isOpenTrans);
         }
     }
 }

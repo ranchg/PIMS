@@ -27,7 +27,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = userBLL.GetForm(F_Id);
             return Content(data.ToJson());
@@ -49,7 +49,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             userBLL.DeleteForm(F_Id);
             return Success("操作成功");
@@ -58,7 +58,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult EnableForm(int F_Id)
+        public ActionResult EnableForm(string F_Id)
         {
             T_User t_User = userBLL.GetForm(F_Id);
             t_User.F_Enable_Mark = 1;
@@ -70,7 +70,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DisableForm(int F_Id)
+        public ActionResult DisableForm(string F_Id)
         {
             T_User t_User = userBLL.GetForm(F_Id);
             t_User.F_Enable_Mark = 0;
@@ -81,7 +81,7 @@ namespace SSI.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult ResetForm(int F_Id)
+        public ActionResult ResetForm(string F_Id)
         {
             T_User t_User = userBLL.GetForm(F_Id);
             t_User.F_Password = Md5Helper.MD5("123456", 0x20).ToUpper();
@@ -98,22 +98,22 @@ namespace SSI.Web.Areas.SystemManage.Controllers
 
         [HttpPost]
         [HttpAjax]
-        public ActionResult SubmitAuthorize(int F_Id, string Roles)
+        public ActionResult SubmitAuthorize(string F_Id, string Roles)
         {
             new UserRoleBLL().DeleteByUserId(F_Id);
-            new UserRoleBLL().InsertFormBatch(Roles.JsonToList<int>().Select(e => new T_User_Role { F_User_Id = F_Id, F_Role_Id = e, F_Enable_Mark = 1 }).ToList());
+            new UserRoleBLL().InsertFormBatch(Roles.JsonToList<string>().Select(e => new T_User_Role { F_User_Id = F_Id, F_Role_Id = e, F_Enable_Mark = 1 }).ToList());
             return Success("操作成功");
         }
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetAuthorize(int F_Id)
+        public ActionResult GetAuthorize(string F_Id)
         {
-            var data = GetTree(new OrgBLL().GetList(), new RoleBLL().GetList(), new RoleBLL().GetListByUserId(F_Id), 1);
+            var data = GetTree(new OrgBLL().GetList(), new RoleBLL().GetList(), new RoleBLL().GetListByUserId(F_Id), "1");
             return Content(data.ToJson());
         }
 
-        private object GetTree(List<T_Org> orgList, List<T_Role> roleList, List<T_Role> userList, int parentId)
+        private object GetTree(List<T_Org> orgList, List<T_Role> roleList, List<T_Role> userList, string parentId)
         {
             var listObj = new List<object>();
             roleList.FindAll(e => e.F_Org_Id == parentId).ForEach(e =>

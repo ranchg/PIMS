@@ -30,7 +30,7 @@ namespace SSI.Web.Areas.BomManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetForm(int F_Id)
+        public ActionResult GetForm(string F_Id)
         {
             var data = bomDetailBLL.getForm(F_Id);
             return Content(data.ToJson());
@@ -47,7 +47,7 @@ namespace SSI.Web.Areas.BomManage.Controllers
         [HttpPost]
         [HttpAjax]
         [AuthAction]
-        public ActionResult DeleteForm(int F_Id)
+        public ActionResult DeleteForm(string F_Id)
         {
             bomDetailBLL.DeleteForm(F_Id);
             return Success("操作成功");
@@ -77,7 +77,7 @@ namespace SSI.Web.Areas.BomManage.Controllers
 
         [HttpGet]
         [HttpAjax]
-        public ActionResult GetDetailById(int f_id,GridParam gp)
+        public ActionResult GetDetailById(string f_id,GridParam gp)
         {
             var data = new
             {

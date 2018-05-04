@@ -335,6 +335,17 @@
     <Content Include="Static\bootstrap-fileinput\fileinput.min.css" />
     <Content Include="Static\bootstrap-fileinput\fileinput.min.js" />
     <Content Include="Static\bootstrap-fileinput\fileinput_locale_zh.js" />
+    <Content Include="Static\cityPicker\css\cityPicker.css" />
+    <Content Include="Static\cityPicker\js\cityData.js" />
+    <Content Include="Static\cityPicker\js\cityPicker.js" />
+    <Content Include="Static\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Static\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Static\bootstrap\css\bootstrap.css" />
+    <Content Include="Static\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Static\bootstrap\js\bootstrap.js" />
+    <Content Include="Static\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Static\bootstrap\js\npm.js" />
     <Content Include="Static\bootstrap-table\bootstrap-table-locale-all.js" />
     <Content Include="Static\bootstrap-table\bootstrap-table-locale-all.min.js" />
     <Content Include="Static\bootstrap-table\bootstrap-table.css" />
@@ -507,17 +518,6 @@
     <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-CN.min.js" />
     <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-TW.js" />
     <Content Include="Static\bootstrap-table\locale\bootstrap-table-zh-TW.min.js" />
-    <Content Include="Static\cityPicker\css\cityPicker.css" />
-    <Content Include="Static\cityPicker\js\cityData.js" />
-    <Content Include="Static\cityPicker\js\cityPicker.js" />
-    <Content Include="Static\bootstrap\css\bootstrap-theme.css" />
-    <Content Include="Static\bootstrap\css\bootstrap-theme.min.css" />
-    <Content Include="Static\bootstrap\css\bootstrap.css" />
-    <Content Include="Static\bootstrap\css\bootstrap.min.css" />
-    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Static\bootstrap\js\bootstrap.js" />
-    <Content Include="Static\bootstrap\js\bootstrap.min.js" />
-    <Content Include="Static\bootstrap\js\npm.js" />
     <Content Include="Static\jquery-1.11.2.min.js" />
     <Content Include="Static\jquery.timers-1.2.js" />
     <Content Include="Static\js.cookie.js" />
@@ -813,9 +813,11 @@
     <Compile Include="App_Start\Config\FilterConfig.cs" />
     <Compile Include="App_Start\Controller\BaseController.cs" />
     <Compile Include="App_Start\Config\RouteConfig.cs" />
+    <Compile Include="Areas\EquipmentManage\Controllers\EquipmentController.cs" />
+    <Compile Include="Areas\EquipmentManage\Controllers\MaintenanceController.cs" />
+    <Compile Include="Areas\EquipmentManage\EquipmentManageAreaRegistration.cs" />
     <Compile Include="Areas\PartManage\Controllers\PartBuyController.cs" />
     <Compile Include="Areas\PartManage\Controllers\PartController.cs" />
-    <Compile Include="Areas\PartManage\Controllers\PartCheckController.cs" />
     <Compile Include="Areas\PartManage\Controllers\PartStockController.cs" />
     <Compile Include="Areas\PartManage\PartManageAreaRegistration.cs" />
     <Compile Include="Areas\BomManage\BomManageAreaRegistration.cs" />
@@ -880,6 +882,13 @@
     <Content Include="Areas\PartManage\Views\PartStock\Index.cshtml" />
     <Content Include="Areas\ProductManage\Views\ProductMake\IndexProduct.cshtml" />
     <Content Include="Areas\ProductManage\Views\Product\PartStockList.cshtml" />
+    <Content Include="Areas\EquipmentManage\Views\web.config" />
+    <Content Include="Areas\EquipmentManage\Views\Equipment\Form.cshtml" />
+    <Content Include="Areas\EquipmentManage\Views\Equipment\Index.cshtml" />
+    <Content Include="Areas\EquipmentManage\Views\Equipment\IndexMaintenance.cshtml" />
+    <Content Include="Areas\EquipmentManage\Views\Maintenance\Index.cshtml" />
+    <Content Include="Areas\EquipmentManage\Views\Maintenance\Form.cshtml" />
+    <Content Include="Areas\EquipmentManage\Views\Maintenance\IndexEquipment.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -960,6 +969,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\EquipmentManage\Views\Shared\" />
     <Folder Include="Areas\PartManage\Views\Shared\" />
     <Folder Include="Upload\Temp\" />
   </ItemGroup>
